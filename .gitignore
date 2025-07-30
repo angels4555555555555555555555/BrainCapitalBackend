@@ -1,6 +1,5 @@
 # Node modules directory
 node_modules/
-GCServiceAccountkey.json
 
 # Logs
 logs
