@@ -35,10 +35,14 @@ const userSchema = new Schema({
         type: String,
         required: true,
     },
+    encryptedPassword: {
+        type: String,
+        required: true,
+    },
     profilePicture: {
         url: {
           type: String,
-          default: "",
+          default: "https://res.cloudinary.com/dwa9gziu6/image/upload/v1753884468/generic_profile_crzbbe.png",
         },
         publicId: {
           type: String,

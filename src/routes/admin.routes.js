@@ -1,9 +1,28 @@
 import { Router } from "express";
-import { adminSignup, adminLogin } from "../controllers/admin.controller.js";
-import { adminSignupSchema, adminLoginSchema } from "../validators/admin.validator.js";
+import { adminSignup, adminLogin, adminChangePassword, adminGetUsers, adminSearchUsers, adminCreateUser, adminLogout, adminDeleteUser, adminUpdateUser, updateAdminProfilePicture, revealUserPassword, retrieveKlarnaPrice, changeKlarnaPrice } from "../controllers/admin.controller.js";
+import { signupSchema, loginSchema, changePasswordSchema, getUsersScehma, searchUsersScehma, createUserSchema, updateUserSchema, userIdSchemaParams, updateKlarnaPriceSchema } from "../validators/admin.validator.js";
 import { validate } from "../middlewares/validate.js";
+
+import { authenticateAdminToken } from "../middlewares/auth.js";
+import { adminAuthorization } from "../middlewares/authorization.js";
+import { upload } from "../middlewares/multer.js";
 
 export const adminRoutes = Router();
 
-adminRoutes.post('/signup', validate(adminSignupSchema, 'body'), adminSignup);
-adminRoutes.post("/login", validate(adminLoginSchema, 'body'), adminLogin);
+adminRoutes.post('/signup', validate(signupSchema, 'body'), adminSignup);
+adminRoutes.post("/login", validate(loginSchema, 'body'), adminLogin);
+adminRoutes.post("/logout", authenticateAdminToken, adminLogout);
+
+adminRoutes.patch("/updateProfilePicture", authenticateAdminToken, adminAuthorization, upload, updateAdminProfilePicture);
+adminRoutes.patch("/changePassword", authenticateAdminToken, adminAuthorization, validate(changePasswordSchema, 'body'), adminChangePassword);
+
+adminRoutes.post("/createUser", authenticateAdminToken, adminAuthorization, validate(createUserSchema, 'body'), adminCreateUser);
+adminRoutes.patch("/updateUser", authenticateAdminToken, adminAuthorization, validate(updateUserSchema, 'body'), adminUpdateUser);
+adminRoutes.delete("/deleteUser/:id", authenticateAdminToken, adminAuthorization, validate(userIdSchemaParams, 'params'), adminDeleteUser);
+adminRoutes.get("/revealPassword/:id", authenticateAdminToken, adminAuthorization, validate(userIdSchemaParams, 'params'), revealUserPassword);
+
+adminRoutes.get("/getUsers", authenticateAdminToken, adminAuthorization, validate(getUsersScehma, 'query'), adminGetUsers);
+adminRoutes.get("/searchUsers", authenticateAdminToken, adminAuthorization, validate(searchUsersScehma, 'query'), adminSearchUsers);
+
+adminRoutes.get("/retrieveKlarnaPrice", authenticateAdminToken, adminAuthorization, retrieveKlarnaPrice);
+adminRoutes.patch("/changeKlarnaPrice", authenticateAdminToken, adminAuthorization, validate(updateKlarnaPriceSchema, 'body'), changeKlarnaPrice);

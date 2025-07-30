@@ -13,7 +13,7 @@ const adminSchema = new Schema({
     profilePicture: {
         url: {
           type: String,
-          default: "",
+          default: "https://res.cloudinary.com/dwa9gziu6/image/upload/v1753884468/generic_profile_crzbbe.png",
         },
         publicId: {
           type: String,
