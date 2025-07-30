@@ -59,7 +59,8 @@ export const getProfileData = async (userId) => {
     
         return {
           ...user,
-          totalShareValue
+          totalShareValue,
+          klarnaPrice
         };
     } catch (err) {
         throw err;
