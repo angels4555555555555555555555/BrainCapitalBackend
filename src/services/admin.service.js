@@ -9,6 +9,13 @@ import { getKlarnaPrice } from "../utils/klarnaPrice.js";
 
 export const signup = async (email, password) => {
     try {
+
+        //Check if admin already exists
+        const existingAdmin = await Admin.findOne({ email });
+        if (existingAdmin) {
+            throw new Error("An admin with same email already exists.");
+        }
+        
         const hash = await hashPassword(password);
         await Admin.create({ email, password: hash});
     } catch (err) {
@@ -153,7 +160,7 @@ export const createUser = async ({ email, password, firstName, lastName, dob, ge
         if (existingUser) {
             throw new Error("A user with same email already exists.");
         }
-        
+
         const encryptedPassword = encryptPassword(password);
         const hash = await hashPassword(password);
         await User.create({ email, password: hash, encryptedPassword: encryptedPassword, firstName, lastName, dob, gender, country, shares });
