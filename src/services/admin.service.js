@@ -147,6 +147,13 @@ export const searchUsers = async (searchTerm, page = 1, pageSize = 10) => {
 
 export const createUser = async ({ email, password, firstName, lastName, dob, gender, country, shares }) => {
     try {
+
+        //Check if user already exists
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+            throw new Error("A user with same email already exists.");
+        }
+        
         const encryptedPassword = encryptPassword(password);
         const hash = await hashPassword(password);
         await User.create({ email, password: hash, encryptedPassword: encryptedPassword, firstName, lastName, dob, gender, country, shares });

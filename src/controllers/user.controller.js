@@ -31,6 +31,7 @@ export const userLogout = async (req, res) => {
 
     return res.status(200).json({ message: "Logout successful" });
   } catch (err) {
+    console.log(err);
     return res.status(400).json({ message: err.message });
   }
 }
@@ -45,6 +46,7 @@ export const updateUserProfilePicture = async (req, res) => {
     await updateProfilePicture(req.user, req.file.path);
     return res.status(200).json({ message: "Profile picture updated successfully" });
   } catch (err) {
+    console.log(err);
     return res.status(400).json({ message: err.message });
   }
   finally
@@ -61,6 +63,7 @@ export const getUserProfileData = async (req, res) => {
     const user = await getProfileData(req.user._id);
     return res.status(200).json({ message: "Profile data fetched successfully", user: user });
   } catch (err) {
+    console.log(err);
     return res.status(400).json({ message: err.message });
   }
 }
