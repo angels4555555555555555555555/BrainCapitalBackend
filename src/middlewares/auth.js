@@ -7,7 +7,7 @@ export const authenticateUserToken = async (req, res, next) => {
     }
 
     try {
-        const decryptedToken = await jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+        const decryptedToken = await jwt.verify(token, process.env.JWT_SECRET);
 
         if (!decryptedToken) {
             return res.status(403).json({ message: 'Invalid token' });
@@ -17,6 +17,7 @@ export const authenticateUserToken = async (req, res, next) => {
 
         next();
     } catch (err) {
+        console.log(err);
         return res.status(403).json({ message: 'Invalid token' });
     }
 };
@@ -28,9 +29,10 @@ export const authenticateAdminToken = async (req, res, next) => {
     }
 
     try {
-        const decryptedToken = await jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+        const decryptedToken = await jwt.verify(token, process.env.JWT_SECRET);
 
         if (!decryptedToken) {
+            console.log(decryptedToken);
             return res.status(403).json({ message: 'Invalid token' });
         }
 
@@ -38,6 +40,7 @@ export const authenticateAdminToken = async (req, res, next) => {
 
         next();
     } catch (err) {
+        console.log(err);
         return res.status(403).json({ message: 'Invalid token' });
     }
 };

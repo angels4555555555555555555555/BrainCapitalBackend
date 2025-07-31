@@ -1,6 +1,9 @@
 import crypto from 'crypto';
+import dotenv from 'dotenv';
 
-const ENCRYPTION_KEY = process.env.PASSWORD_ENCRYPTION_KEY;
+dotenv.config();
+
+const ENCRYPTION_KEY = Buffer.from(process.env.PASSWORD_ENCRYPTION_KEY, 'hex');
 const IV_LENGTH = 16;
 
 export const encryptPassword = (password) => {

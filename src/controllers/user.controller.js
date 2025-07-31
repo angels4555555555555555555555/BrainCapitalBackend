@@ -10,7 +10,6 @@ export const userLogin = async (req, res) => {
       httpOnly: true,
       secure: true,
       sameSite: "none",
-      maxAge: 3 * 24 * 60 * 60 * 1000,
     });
 
     return res.status(200).json({ message: "Login successful" });
@@ -41,7 +40,7 @@ export const updateUserProfilePicture = async (req, res) => {
   {
     if (!req.file) 
     {
-      return res.status(400).json({ message: "No file uploaded" });
+      return res.status(400).json({ message: "No Picture uploaded" });
     }
     await updateProfilePicture(req.user, req.file.path);
     return res.status(200).json({ message: "Profile picture updated successfully" });

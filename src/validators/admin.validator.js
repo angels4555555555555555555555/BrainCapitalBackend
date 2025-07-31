@@ -61,6 +61,7 @@ export const createUserSchema = Joi.object({
 
 export const updateUserSchema = Joi.object({
   userId: Joi.string().length(24).hex().required(),
+
   firstName: Joi.string().trim().optional(),
   lastName: Joi.string().trim().optional(),
   dob: Joi.date().optional(),
@@ -70,6 +71,10 @@ export const updateUserSchema = Joi.object({
 
   email: Joi.any().forbidden().messages({ 'any.unknown': 'Email cannot be updated' }),
   password: Joi.any().forbidden().messages({ 'any.unknown': 'Password cannot be updated' })
+})
+.or('firstName', 'lastName', 'dob', 'gender', 'country', 'shares') // Requires at least one
+.messages({
+  'object.missing': 'At least one field to update must be provided'
 });
 
 export const userIdSchemaParams = Joi.object({
