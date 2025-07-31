@@ -2,6 +2,7 @@ import User from "../models/User.js";
 import { verifyPassword } from "../utils/hashPassword.js";
 import { uploadSingleImage, deleteSingleImage } from "../utils/imageUpload.js";
 import { getKlarnaPrice } from "../utils/klarnaPrice.js";
+import { generateAuthToken } from "../utils/jwt.js";
 
 export const login = async (email, password) => {
     try {
