@@ -6,7 +6,7 @@ import { getKlarnaPrice } from "../utils/klarnaPrice.js";
 export const login = async (email, password) => {
     try {
         const user = await User.findOne({ email });
-        if (!admin) {
+        if (!user) {
             throw new Error("Invalid user email or password");
         }
         const isPasswordValid = await verifyPassword(password, user.password);
