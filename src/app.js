@@ -45,6 +45,6 @@ app.use(express.json());
 // Using the routes
 app.use("/api/admin", adminRoutes);
 app.use("/api/user", userRoutes);
-app.get("/api/testing", (req, res) => res.send("Hello World, Testing API!"));
+app.get("/api/testing", (req, res) => res.send("Hello World, Testing APIs"));
 
 export default app;
