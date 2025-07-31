@@ -159,8 +159,8 @@ export const retrieveKlarnaPrice = async (req, res) => {
 
 export const changeKlarnaPrice = async (req, res) => {
   try {
-    const { newklarnaPrice } = req.body;
-    await updateKlarnaPrice(newklarnaPrice);
+    const { newKlarnaPrice } = req.body;
+    await updateKlarnaPrice(newKlarnaPrice);
     return res.status(200).json({ message: "Klarna price updated successfully" });
   } catch (err) {
     console.log(err);

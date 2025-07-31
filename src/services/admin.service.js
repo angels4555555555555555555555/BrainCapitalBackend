@@ -238,11 +238,11 @@ export const updateProfilePicture = async (admin, filePath) => {
     }
 };
 
-export const updateKlarnaPrice = async (newklarnaPrice) => {
+export const updateKlarnaPrice = async (newKlarnaPrice) => {
     try {
         await KlarnaPrice.updateOne(
             {},
-            { $set: { currentPrice: newklarnaPrice } },
+            { $set: { currentPrice: newKlarnaPrice } },
             { upsert: true }
         );
     } catch (err) {
