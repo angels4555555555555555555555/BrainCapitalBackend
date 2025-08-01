@@ -86,5 +86,5 @@ export const updateKlarnaPriceSchema = Joi.object({
 });
 
 export const deleteUsersSchema = Joi.object({
-  userIds: Joi.array().items(Joi.string().length(24).hex()).required()
+  userIds: Joi.array().items(Joi.string().length(24).hex()).min(1).required()
 });
