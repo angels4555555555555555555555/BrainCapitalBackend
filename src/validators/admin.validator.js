@@ -33,7 +33,7 @@ export const getUsersScehma = Joi.object({
 });
 
 export const searchUsersScehma = Joi.object({
-  searchTerm: Joi.string().trim().min(1).required(),
+  searchTerm: Joi.string().trim().min(0).allow('').required(),
   page: Joi.number().integer().min(1).default(1),
   pageSize: Joi.number().integer().min(1).max(100).default(10)
 });
