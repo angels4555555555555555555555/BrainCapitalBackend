@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { adminSignup, adminLogin, adminChangePassword, adminGetUsers, adminSearchUsers, adminCreateUser, adminLogout, adminDeleteUser, adminUpdateUser, updateAdminProfilePicture, revealUserPassword, retrieveKlarnaPrice, changeKlarnaPrice } from "../controllers/admin.controller.js";
+import { adminSignup, adminLogin, adminCheckAuthStatus, adminChangePassword, adminGetUsers, adminSearchUsers, adminCreateUser, adminLogout, adminDeleteUser, adminUpdateUser, updateAdminProfilePicture, revealUserPassword, retrieveKlarnaPrice, changeKlarnaPrice } from "../controllers/admin.controller.js";
 import { signupSchema, loginSchema, changePasswordSchema, getUsersScehma, searchUsersScehma, createUserSchema, updateUserSchema, userIdSchemaParams, updateKlarnaPriceSchema } from "../validators/admin.validator.js";
 import { validate } from "../middlewares/validate.js";
 
@@ -12,6 +12,7 @@ export const adminRoutes = Router();
 adminRoutes.post('/signup', validate(signupSchema, 'body'), adminSignup);
 adminRoutes.post("/login", validate(loginSchema, 'body'), adminLogin);
 adminRoutes.post("/logout", authenticateAdminToken, adminLogout);
+adminRoutes.get("/checkAuthStatus", authenticateAdminToken, adminCheckAuthStatus);
 
 adminRoutes.patch("/updateProfilePicture", authenticateAdminToken, adminAuthorization, upload, updateAdminProfilePicture);
 adminRoutes.patch("/changePassword", authenticateAdminToken, adminAuthorization, validate(changePasswordSchema, 'body'), adminChangePassword);
