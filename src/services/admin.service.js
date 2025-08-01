@@ -261,3 +261,15 @@ export const getProfileData = async (userId) => {
         throw err;
     }
 };
+
+export const getUser = async (userId) => {
+    try {
+        const user = await User.findById(userId).select("-password -encryptedPassword").lean();
+        if (!user) {
+            throw new Error("User not found");
+        }
+        return user;
+    } catch (err) {
+        throw err;
+    }
+};

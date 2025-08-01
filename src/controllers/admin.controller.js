@@ -1,5 +1,5 @@
 import fs from "fs";
-import { signup, login, getProfileData, changePassword, searchUsers, getUsers, createUser, updateUser, deleteUser, revealPassword, updateProfilePicture, updateKlarnaPrice } from "../services/admin.service.js";
+import { signup, login, getProfileData, changePassword, searchUsers, getUsers, getUser, createUser, updateUser, deleteUser, revealPassword, updateProfilePicture, updateKlarnaPrice } from "../services/admin.service.js";
 import { getKlarnaPrice } from "../utils/klarnaPrice.js";
 
 export const adminSignup = async (req, res) => {
@@ -69,6 +69,17 @@ export const adminGetUsers = async (req, res) => {
     return res.status(400).json({ message: err.message });
   }
 };
+
+export const adminGetUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await getUser(id);
+    return res.status(200).json({ message: "User fetched successfully", user });
+  } catch (err) {
+    console.log(err);
+    return res.status(400).json({ message: err.message });
+  }
+}
 
 export const adminSearchUsers = async (req, res) => {
   try {
