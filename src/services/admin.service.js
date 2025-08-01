@@ -249,3 +249,15 @@ export const updateKlarnaPrice = async (newKlarnaPrice) => {
         throw err;
     }
 };
+
+export const getProfileData = async (userId) => {
+    try {
+        const admin = await Admin.findById(userId).select("-password").lean();
+        if (!admin) {
+            throw new Error("Admin not found");
+        }
+        return admin;
+    } catch (err) {
+        throw err;
+    }
+};
