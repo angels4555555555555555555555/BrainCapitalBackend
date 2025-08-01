@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { userLogin, userLogout, getUserProfileData, updateUserProfilePicture } from "../controllers/user.controller.js";
+import { userLogin, userLogout, userCheckAuthStatus, getUserProfileData, updateUserProfilePicture } from "../controllers/user.controller.js";
 import { userLoginSchema } from "../validators/user.validator.js";
 import { validate } from "../middlewares/validate.js";
 
@@ -11,6 +11,7 @@ export const userRoutes = Router();
 
 userRoutes.post("/login", validate(userLoginSchema, 'body'), userLogin);
 userRoutes.post("/logout", authenticateUserToken, userLogout);
+userRoutes.get("/checkAuthStatus", authenticateUserToken, userCheckAuthStatus);
 
 userRoutes.get("/getProfile", authenticateUserToken, userAuthorization, getUserProfileData);
 userRoutes.patch("/updateProfilePicture", authenticateUserToken, userAuthorization, upload, updateUserProfilePicture);

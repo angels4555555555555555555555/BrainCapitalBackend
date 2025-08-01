@@ -66,3 +66,12 @@ export const getUserProfileData = async (req, res) => {
     return res.status(400).json({ message: err.message });
   }
 }
+
+export const userCheckAuthStatus = async (req, res) => {
+  try {
+    return res.status(200).json({ message: "Authenticated" });
+  } catch (err) {
+    console.log(err);
+    return res.status(400).json({ message: err.message });
+  }
+}
