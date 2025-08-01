@@ -84,3 +84,7 @@ export const userIdSchemaParams = Joi.object({
 export const updateKlarnaPriceSchema = Joi.object({ 
   newKlarnaPrice: Joi.number().min(0).required() 
 });
+
+export const deleteUsersSchema = Joi.object({
+  userIds: Joi.array().items(Joi.string().length(24).hex()).required()
+});

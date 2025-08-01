@@ -105,8 +105,8 @@ export const adminUpdateUser = async (req, res) => {
 
 export const adminDeleteUser = async (req, res) => {
   try {
-    const { id } = req.params;
-    await deleteUser(id);
+    const { userIds } = req.body;
+    await deleteUser(userIds);
     return res.status(201).json({ message: "User deleted successfully" });
   } catch (err) {
     console.log(err);

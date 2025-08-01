@@ -198,9 +198,9 @@ export const updateUser = async (userId, updateData) => {
 
 };
 
-export const deleteUser = async (userId) => {
+export const deleteUser = async (userIds) => {
     try {
-        await User.findByIdAndDelete(userId);
+        await User.deleteMany({ _id: { $in: userIds } });
     } catch (err) {
         throw err;
     }
