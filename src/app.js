@@ -25,6 +25,8 @@ app.use(cookieParser());
 // allowed cors origins
 const allowedOrigins = [
   "http://localhost:3000",
+  "https://www.sk-blackrock-financial.com",
+  
 ];
 
 app.use(
