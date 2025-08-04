@@ -7,7 +7,7 @@ export const signupSchema = Joi.object({
     .required()
     .messages({
       'string.pattern.base':
-        'Password must be at least 8 characters long, contain at least one uppercase letter, one number, and one special character.',
+      'Password must be at least 8 characters long, contain at least one uppercase letter, one number, and one special character from !@#$%^&*',
     }),
 });
 
@@ -23,7 +23,7 @@ export const changePasswordSchema = Joi.object({
     .required()
     .messages({
       'string.pattern.base':
-        'Password must be at least 8 characters long, contain at least one uppercase letter, one number, and one special character.',
+        'Password must be at least 8 characters long, contain at least one uppercase letter, one number, and one special character from !@#$%^&*',
     }),
 });
 
@@ -55,7 +55,7 @@ export const createUserSchema = Joi.object({
     .required()
     .messages({
       'string.pattern.base':
-        'Password must be at least 8 characters long, contain at least one uppercase letter, one number, and one special character.',
+      'Password must be at least 8 characters long, contain at least one uppercase letter, one number, and one special character from !@#$%^&*',
     }),
 });
 
