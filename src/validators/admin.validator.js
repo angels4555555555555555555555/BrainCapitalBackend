@@ -1,5 +1,6 @@
 import Joi from "joi";
 
+// Password must be at least 8 characters long, contain at least one uppercase letter, one number, and one special character from !@#$%^&*
 export const signupSchema = Joi.object({
   email: Joi.string().email().trim().required(),
   password: Joi.string()
@@ -7,7 +8,7 @@ export const signupSchema = Joi.object({
     .required()
     .messages({
       'string.pattern.base':
-      'Password must be at least 8 characters long, contain at least one uppercase letter, one number, and one special character from !@#$%^&*',
+      'Das Passwort muss mindestens 8 Zeichen lang sein, mindestens einen Großbuchstaben, eine Zahl und ein Sonderzeichen aus !@#$%^&* enthalten.',
     }),
 });
 
@@ -16,6 +17,7 @@ export const loginSchema = Joi.object({
   password: Joi.string().required(),
 });
 
+// Password must be at least 8 characters long, contain at least one uppercase letter, one number, and one special character from !@#$%^&*
 export const changePasswordSchema = Joi.object({
   currentPassword: Joi.string().required(),
   newPassword: Joi.string()
@@ -23,7 +25,7 @@ export const changePasswordSchema = Joi.object({
     .required()
     .messages({
       'string.pattern.base':
-        'Password must be at least 8 characters long, contain at least one uppercase letter, one number, and one special character from !@#$%^&*',
+        'Das Passwort muss mindestens 8 Zeichen lang sein, mindestens einen Großbuchstaben, eine Zahl und ein Sonderzeichen aus !@#$%^&* enthalten.',
     }),
 });
 
@@ -42,11 +44,12 @@ export const revealPasswordSchema = Joi.object({
   userId: Joi.string().length(24).hex().required()
 })
 
+// Password must be at least 8 characters long, contain at least one uppercase letter, one number, and one special character from !@#$%^&*
 export const createUserSchema = Joi.object({
   firstName: Joi.string().trim().required(),
   lastName: Joi.string().trim().required(),
   dob: Joi.date().required(),
-  gender: Joi.string().valid("Male", "Female", "Other").required(),
+  gender: Joi.string().valid("Männlich", "Weiblich", "Divers").required(),
   country: Joi.string().trim().required(),
   shares: Joi.number().min(0).required(),
   klarnaPurchasePrice: Joi.number().min(0).required(),
@@ -56,9 +59,13 @@ export const createUserSchema = Joi.object({
     .required()
     .messages({
       'string.pattern.base':
-      'Password must be at least 8 characters long, contain at least one uppercase letter, one number, and one special character from !@#$%^&*',
+      'Das Passwort muss mindestens 8 Zeichen lang sein, mindestens einen Großbuchstaben, eine Zahl und ein Sonderzeichen aus !@#$%^&* enthalten.',
     }),
 });
+
+// Email cannot be updated
+// Password cannot be updated
+// At least one field to update must be provided
 
 export const updateUserSchema = Joi.object({
   userId: Joi.string().length(24).hex().required(),
@@ -66,17 +73,17 @@ export const updateUserSchema = Joi.object({
   firstName: Joi.string().trim().optional(),
   lastName: Joi.string().trim().optional(),
   dob: Joi.date().optional(),
-  gender: Joi.string().valid("Male", "Female", "Other").optional(),
+  gender: Joi.string().valid("Männlich", "Weiblich", "Divers").optional(),
   country: Joi.string().trim().optional(),
   shares: Joi.number().min(0).optional(),
   klarnaPurchasePrice: Joi.number().min(0).required(),
 
-  email: Joi.any().forbidden().messages({ 'any.unknown': 'Email cannot be updated' }),
-  password: Joi.any().forbidden().messages({ 'any.unknown': 'Password cannot be updated' })
+  email: Joi.any().forbidden().messages({ 'any.unknown': 'Die E-Mail-Adresse kann nicht aktualisiert werden.' }),
+  password: Joi.any().forbidden().messages({ 'any.unknown': 'Das Passwort kann nicht aktualisiert werden.' })
 })
-.or('firstName', 'lastName', 'dob', 'gender', 'country', 'shares') // Requires at least one
+.or('firstName', 'lastName', 'dob', 'gender', 'country', 'shares', 'klarnaPurchasePrice') // Requires at least one
 .messages({
-  'object.missing': 'At least one field to update must be provided'
+  'object.missing': 'Es muss mindestens ein Feld zum Aktualisieren angegeben werden.'
 });
 
 export const userIdSchemaParams = Joi.object({

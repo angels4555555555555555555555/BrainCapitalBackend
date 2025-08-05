@@ -15,7 +15,7 @@ const userSchema = new Schema({
     },
     gender: {
         type: String,
-        enum: ["Male", "Female", "Other"],
+        enum: ["Männlich", "Weiblich", "Divers"],
         required: true,
     },
     shares: {
