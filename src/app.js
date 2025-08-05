@@ -35,7 +35,8 @@ app.use(
       if (!origin || allowedOrigins.includes(origin)) {
         callback(null, origin);
       } else {
-        callback(new Error("Not allowed by CORS"));
+        // Not allowed by CORS
+        callback(new Error("Von CORS nicht erlaubt"));
       }
     },
     credentials: true,

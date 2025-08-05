@@ -3,14 +3,16 @@ import jwt from "jsonwebtoken";
 export const authenticateUserToken = async (req, res, next) => {
     const token = req.cookies.accessToken;
     if (!token) {
-        return res.status(401).json({ message: 'No token provided' });
+        // No token provided
+        return res.status(401).json({ message: 'Kein Token bereitgestellt' });
     }
 
     try {
         const decryptedToken = await jwt.verify(token, process.env.JWT_SECRET);
 
         if (!decryptedToken) {
-            return res.status(403).json({ message: 'Invalid token' });
+            //Invalid token
+            return res.status(403).json({ message: 'Ungültiger Token' });
         }
 
         req.authentication = decryptedToken;
@@ -18,14 +20,16 @@ export const authenticateUserToken = async (req, res, next) => {
         next();
     } catch (err) {
         console.log(err);
-        return res.status(403).json({ message: 'Invalid token' });
+        //Invalid token
+        return res.status(403).json({ message: 'Ungültiger Token' });
     }
 };
 
 export const authenticateAdminToken = async (req, res, next) => {
     const token = req.cookies.access_token;
     if (!token) {
-        return res.status(401).json({ message: 'No token provided' });
+        // No token provided
+        return res.status(401).json({ message: 'Kein Token bereitgestellt' });
     }
 
     try {
@@ -33,7 +37,8 @@ export const authenticateAdminToken = async (req, res, next) => {
 
         if (!decryptedToken) {
             console.log(decryptedToken);
-            return res.status(403).json({ message: 'Invalid token' });
+            // Invalid token
+            return res.status(403).json({ message: 'Ungültiger Token' });
         }
 
         req.authentication = decryptedToken;
@@ -41,6 +46,7 @@ export const authenticateAdminToken = async (req, res, next) => {
         next();
     } catch (err) {
         console.log(err);
-        return res.status(403).json({ message: 'Invalid token' });
+        // Invalid token
+        return res.status(403).json({ message: 'Ungültiger Token' });
     }
 };

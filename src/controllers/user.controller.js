@@ -12,7 +12,8 @@ export const userLogin = async (req, res) => {
       sameSite: "none",
     });
 
-    return res.status(200).json({ message: "Login successful" });
+    // Login successful
+    return res.status(200).json({ message: "Anmeldung erfolgreich" });
 
   } catch (err) {
     return res.status(400).json({ message: err.message });
@@ -28,7 +29,8 @@ export const userLogout = async (req, res) => {
       maxAge: 3 * 24 * 60 * 60 * 1000,
     });
 
-    return res.status(200).json({ message: "Logout successful" });
+    // Logout successful
+    return res.status(200).json({ message: "Abmeldung erfolgreich" });
   } catch (err) {
     console.log(err);
     return res.status(400).json({ message: err.message });
@@ -40,10 +42,13 @@ export const updateUserProfilePicture = async (req, res) => {
   {
     if (!req.file) 
     {
-      return res.status(400).json({ message: "No Picture uploaded" });
+      // No Picture uploaded
+      return res.status(400).json({ message: "Kein Bild hochgeladen" });
     }
     await updateProfilePicture(req.user, req.file.path);
-    return res.status(200).json({ message: "Profile picture updated successfully" });
+
+    // Profile picture updated successfully
+    return res.status(200).json({ message: "Profilbild erfolgreich aktualisiert" });
   } catch (err) {
     console.log(err);
     return res.status(400).json({ message: err.message });
@@ -60,7 +65,9 @@ export const updateUserProfilePicture = async (req, res) => {
 export const getUserProfileData = async (req, res) => {
   try {
     const user = await getProfileData(req.user._id);
-    return res.status(200).json({ message: "Profile data fetched successfully", user: user });
+
+    // Profile data fetched successfully
+    return res.status(200).json({ message: "Profildaten erfolgreich abgerufen", user: user });
   } catch (err) {
     console.log(err);
     return res.status(400).json({ message: err.message });
@@ -69,7 +76,9 @@ export const getUserProfileData = async (req, res) => {
 
 export const userCheckAuthStatus = async (req, res) => {
   try {
-    return res.status(200).json({ message: "Authenticated" });
+
+    // Authenticated
+    return res.status(200).json({ message: "Authentifiziert" });
   } catch (err) {
     console.log(err);
     return res.status(400).json({ message: err.message });

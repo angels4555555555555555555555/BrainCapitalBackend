@@ -6,7 +6,9 @@ export const adminSignup = async (req, res) => {
   try {
     const { email, password } = req.body;
     await signup(email, password);
-    return res.status(201).json({ message: "Signup successful" });
+
+    // Signup successful
+    return res.status(201).json({ message: "Registrierung erfolgreich" });
   } catch (err) {
     console.log(err);
     return res.status(400).json({ message: err.message });
@@ -24,7 +26,8 @@ export const adminLogin = async (req, res) => {
       sameSite: "none",
     });
 
-    return res.status(200).json({ message: "Login successful" });
+    // Login successful
+    return res.status(200).json({ message: "Anmeldung erfolgreich" });
 
   } catch (err) {
     console.log(err);
@@ -41,7 +44,8 @@ export const adminLogout = async (req, res) => {
       maxAge: 3 * 24 * 60 * 60 * 1000,
     });
 
-    return res.status(200).json({ message: "Logout successful" });
+    // Logout successful
+    return res.status(200).json({ message: "Abmeldung erfolgreich" });
   } catch (err) {
     console.log(err);
     return res.status(400).json({ message: err.message });
@@ -52,7 +56,9 @@ export const adminChangePassword = async (req, res) => {
   try {
     const { currentPassword, newPassword } = req.body;
     await changePassword(req.user._id, currentPassword, newPassword);
-    return res.status(200).json({ message: "Password changed successfully" });
+
+    // Password changed successfully
+    return res.status(200).json({ message: "Passwort erfolgreich geändert" });
   } catch (err) {
     console.log(err);
     return res.status(400).json({ message: err.message });
@@ -63,7 +69,9 @@ export const adminGetUsers = async (req, res) => {
   try {
     const { page, pageSize } = req.query;
     const {users, totalUsers, currentPage, totalPages} = await getUsers(page, pageSize);
-    return res.status(200).json({ message: "Users fetched successfully", users, totalUsers, currentPage, totalPages });
+
+    // Users fetched successfully
+    return res.status(200).json({ message: "Benutzer erfolgreich abgerufen", users, totalUsers, currentPage, totalPages });
   } catch (err) {
     console.log(err);
     return res.status(400).json({ message: err.message });
@@ -74,7 +82,9 @@ export const adminGetUser = async (req, res) => {
   try {
     const { id } = req.params;
     const user = await getUser(id);
-    return res.status(200).json({ message: "User fetched successfully", user });
+
+    // User fetched successfully"
+    return res.status(200).json({ message: "Benutzer erfolgreich abgerufen", user });
   } catch (err) {
     console.log(err);
     return res.status(400).json({ message: err.message });
@@ -85,7 +95,9 @@ export const adminSearchUsers = async (req, res) => {
   try {
     const { searchTerm, page, pageSize } = req.query;
     const {users, totalUsers, currentPage, totalPages} = await searchUsers(searchTerm, page, pageSize);
-    return res.status(200).json({ message: "Users fetched successfully", users, totalUsers, currentPage, totalPages });
+
+    // Users fetched successfully
+    return res.status(200).json({ message: "Benutzer erfolgreich abgerufen", users, totalUsers, currentPage, totalPages });
   } catch (err) {
     console.log(err);
     return res.status(400).json({ message: err.message });
@@ -96,7 +108,9 @@ export const adminCreateUser = async (req, res) => {
   try {
     const { email, password, firstName, lastName, dob, gender, country, shares, klarnaPurchasePrice } = req.body;
     await createUser({ email, password, firstName, lastName, dob, gender, country, shares, klarnaPurchasePrice });
-    return res.status(201).json({ message: "User created successfully" });
+
+    // User created successfully
+    return res.status(201).json({ message: "Benutzer erfolgreich erstellt" });
   } catch (err) {
     console.log(err);
     return res.status(400).json({ message: err.message });
@@ -107,7 +121,9 @@ export const adminUpdateUser = async (req, res) => {
   try {
     const { userId, ...fieldsToUpdate } = req.body;
     await updateUser(userId, fieldsToUpdate);
-    return res.status(201).json({ message: "User updated successfully" });
+
+    // User updated successfully"
+    return res.status(201).json({ message: "Benutzer erfolgreich aktualisiert" });
   } catch (err) {
     console.log(err);
     return res.status(400).json({ message: err.message });
@@ -118,7 +134,9 @@ export const adminDeleteUser = async (req, res) => {
   try {
     const { userIds } = req.body;
     await deleteUser(userIds);
-    return res.status(201).json({ message: "User deleted successfully" });
+
+    // User deleted successfully
+    return res.status(201).json({ message: "Benutzer erfolgreich gelöscht" });
   } catch (err) {
     console.log(err);
     return res.status(400).json({ message: err.message });
@@ -129,7 +147,9 @@ export const revealUserPassword = async (req, res) => {
   try {
     const { id } = req.params;
     const password = await revealPassword(id);
-    return res.status(200).json({ message: "Password revealed successfully", password });
+
+    // Password revealed successfully
+    return res.status(200).json({ message: "Passwort erfolgreich angezeigt", password });
   } catch (err) {
     console.log(err);
     return res.status(400).json({ message: err.message });
@@ -141,10 +161,13 @@ export const updateAdminProfilePicture = async (req, res) => {
   {
     if (!req.file) 
     {
-      return res.status(400).json({ message: "No Picture uploaded" });
+      // No Picture uploaded
+      return res.status(400).json({ message: "Kein Bild hochgeladen" });
     }
     await updateProfilePicture(req.user, req.file.path);
-    return res.status(200).json({ message: "Profile picture updated successfully" });
+
+    // Profile picture updated successfully
+    return res.status(200).json({ message: "Profilbild erfolgreich aktualisiert" });
   } catch (err) {
     console.log(err);
     return res.status(400).json({ message: err.message });
@@ -161,7 +184,9 @@ export const updateAdminProfilePicture = async (req, res) => {
 export const retrieveKlarnaPrice = async (req, res) => {
   try {
     const klarnaPrice = await getKlarnaPrice();
-    return res.status(200).json({ message: "Klarna price fetched successfully", klarnaPrice });
+
+    // Klarna price fetched successfully
+    return res.status(200).json({ message: "Klarna-Preis erfolgreich abgerufen", klarnaPrice });
   } catch (err) {
     console.log(err);
     return res.status(400).json({ message: err.message });
@@ -172,7 +197,9 @@ export const changeKlarnaPrice = async (req, res) => {
   try {
     const { newKlarnaPrice } = req.body;
     await updateKlarnaPrice(newKlarnaPrice);
-    return res.status(200).json({ message: "Klarna price updated successfully" });
+
+    // Klarna price updated successfully
+    return res.status(200).json({ message: "Klarna-Preis erfolgreich aktualisiert" });
   } catch (err) {
     console.log(err);
     return res.status(400).json({ message: err.message });
@@ -181,7 +208,8 @@ export const changeKlarnaPrice = async (req, res) => {
 
 export const adminCheckAuthStatus = async (req, res) => {
   try {
-    return res.status(200).json({ message: "Authenticated" });
+    // Authenticated
+    return res.status(200).json({ message: "Authentifiziert" });
   } catch (err) {
     console.log(err);
     return res.status(400).json({ message: err.message });
@@ -191,7 +219,9 @@ export const adminCheckAuthStatus = async (req, res) => {
 export const getAdminProfileData = async (req, res) => {
   try {
     const profile = await getProfileData(req.user._id);
-    return res.status(200).json({ message: "Profile data fetched successfully", admin: profile });
+
+    // Profile data fetched successfully
+    return res.status(200).json({ message: "Profildaten erfolgreich abgerufen", admin: profile });
   } catch (err) {
     console.log(err);
     return res.status(400).json({ message: err.message });

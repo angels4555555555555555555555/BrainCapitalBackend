@@ -16,7 +16,8 @@ export const uploadSingleImage = async (filePath, folder = 'uploads') => {
         };
 
     } catch (error) {
-        throw new Error('Cloudinary upload failed: ' + error.message);
+        // Cloudinary upload failed:
+        throw new Error('Cloudinary-Upload fehlgeschlagen: ' + error.message);
     }
 };
 
@@ -26,6 +27,7 @@ export const deleteSingleImage = async (publicId) => {
         return result;
 
     } catch (error) {
-        throw new Error('Cloudinary deletion failed: ' + error.message);
+        // Cloudinary deletion failed:
+        throw new Error('Cloudinary-Löschung fehlgeschlagen: ' + error.message);
     }
 };

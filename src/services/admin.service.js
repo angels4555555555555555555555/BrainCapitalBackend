@@ -13,7 +13,8 @@ export const signup = async (email, password) => {
         //Check if admin already exists
         const existingAdmin = await Admin.findOne({ email });
         if (existingAdmin) {
-            throw new Error("An admin with same email already exists.");
+            // An admin with same email already exists.
+            throw new Error("Ein Administrator mit derselben E-Mail-Adresse existiert bereits.");
         }
         
         const hash = await hashPassword(password);
@@ -27,11 +28,13 @@ export const login = async (email, password) => {
     try {
         const admin = await Admin.findOne({ email });
         if (!admin) {
-            throw new Error("Invalid admin email or password");
+            // Invalid admin email or password
+            throw new Error("Ungültige Administrator-E-Mail oder ungültiges Passwort");
         }
         const isPasswordValid = await verifyPassword(password, admin.password);
         if (!isPasswordValid) {
-            throw new Error("Invalid admin email or password");
+            // Invalid admin email or password
+            throw new Error("Ungültige Administrator-E-Mail oder ungültiges Passwort");
         }
 
         const token = generateAuthToken(admin._id, admin.email, true);
@@ -46,11 +49,13 @@ export const changePassword = async (id, oldPassword, newPassword) => {
     try {
         const admin = await Admin.findById(id);
         if (!admin) {
-            throw new Error("Invalid admin id");
+            // Invalid admin id
+            throw new Error("Ungültige Administrator-ID");
         }
         const isPasswordValid = await verifyPassword(oldPassword, admin.password);
         if (!isPasswordValid) {
-            throw new Error("Invalid current password");
+            // Invalid current password
+            throw new Error("Ungültiges aktuelles Passwort");
         }
         const hash = await hashPassword(newPassword);
         admin.password = hash;
@@ -66,7 +71,8 @@ export const getUsers = async (page = 1, pageSize = 10) => {
         const klarnaPrice = await getKlarnaPrice();
 
         if (!klarnaPrice) {
-            throw new Error("Failed to retrieve klarna price");
+            // Failed to retrieve klarna price
+            throw new Error("Fehler beim Abrufen des Klarna-Preises");
         }
 
         const [users, totalUsers] = await Promise.all([
@@ -108,7 +114,8 @@ export const searchUsers = async (searchTerm, page = 1, pageSize = 10) => {
         const klarnaPrice = await getKlarnaPrice();
 
         if (!klarnaPrice) {
-            throw new Error("Failed to retrieve klarna price");
+            // Failed to retrieve klarna price
+            throw new Error("Fehler beim Abrufen des Klarna-Preises");
         }
 
         const query = {
@@ -158,7 +165,8 @@ export const createUser = async ({ email, password, firstName, lastName, dob, ge
         //Check if user already exists
         const existingUser = await User.findOne({ email });
         if (existingUser) {
-            throw new Error("A user with same email already exists.");
+            // A user with same email already exists.
+            throw new Error("Ein Benutzer mit derselben E-Mail-Adresse existiert bereits.");
         }
 
         const encryptedPassword = encryptPassword(password);
@@ -187,7 +195,8 @@ export const updateUser = async (userId, updateData) => {
         });
       
         if (!updatedUser) {
-          throw new Error('User not found');
+            // User not found
+          throw new Error('Benutzer nicht gefunden');
         }
       
         return updatedUser;
@@ -210,7 +219,8 @@ export const revealPassword = async (userId) => {
     try {
         const user = await User.findById(userId);
         if (!user) {
-            throw new Error("User not found");
+            // User not found
+            throw new Error("Benutzer nicht gefunden");
         }
         const decryptedPassword = decryptPassword(user.encryptedPassword);
         return decryptedPassword;
@@ -254,7 +264,8 @@ export const getProfileData = async (userId) => {
     try {
         const admin = await Admin.findById(userId).select("-password").lean();
         if (!admin) {
-            throw new Error("Admin not found");
+            // Admin not found
+            throw new Error("Administrator nicht gefunden");
         }
         return admin;
     } catch (err) {
@@ -266,7 +277,8 @@ export const getUser = async (userId) => {
     try {
         const user = await User.findById(userId).select("-password -encryptedPassword").lean();
         if (!user) {
-            throw new Error("User not found");
+            // User not found
+            throw new Error("Benutzer nicht gefunden");
         }
         return user;
     } catch (err) {

@@ -7,7 +7,8 @@ export const adminAuthorization = async (req, res, next) => {
       const admin = await Admin.findById(id);
       if (!admin) 
       {
-        return res.status(403).json({ message: "You are not authorized to perform this action." });
+        // You are not authorized to perform this action.
+        return res.status(403).json({ message: "Sie sind nicht berechtigt, diese Aktion durchzuführen." });
       }
 
       req.user = admin;
@@ -22,7 +23,8 @@ export const userAuthorization = async (req, res, next) => {
         const user = await User.findById(id);
         if (!user) 
         {
-          return res.status(403).json({ message: "You are not authorized to perform this action." });
+          // You are not authorized to perform this action.
+          return res.status(403).json({ message: "Sie sind nicht berechtigt, diese Aktion durchzuführen." });
         }
   
         req.user = user;

@@ -8,11 +8,13 @@ export const login = async (email, password) => {
     try {
         const user = await User.findOne({ email });
         if (!user) {
-            throw new Error("Invalid user email or password");
+            // Invalid user email or password
+            throw new Error("Ungültige Benutzer-E-Mail oder ungültiges Passwort");
         }
         const isPasswordValid = await verifyPassword(password, user.password);
         if (!isPasswordValid) {
-            throw new Error("Invalid user email or password");
+            // Invalid user email or password
+            throw new Error("Ungültige Benutzer-E-Mail oder ungültiges Passwort");
         }
 
         const token = generateAuthToken(user._id, user.email, false);
@@ -46,13 +48,15 @@ export const getProfileData = async (userId) => {
     try {
         const user = await User.findById(userId).select("-password -encryptedPassword").lean();
         if (!user) {
-            throw new Error("User not found");
+            // User not found
+            throw new Error("Benutzer nicht gefunden");
         }
 
         const klarnaPrice = await getKlarnaPrice();
 
         if (!klarnaPrice) {
-            throw new Error("Failed to retrieve klarna price");
+            // Failed to retrieve klarna price
+            throw new Error("Fehler beim Abrufen des Klarna-Preises");
         }
 
         const rawValue = user.shares * klarnaPrice;

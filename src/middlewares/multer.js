@@ -20,7 +20,8 @@ const imageFileFilter = (req, file, cb) => {
   if (allowedMimeTypes.includes(file.mimetype)) {
     cb(null, true);
   } else {
-    cb(new Error('Only image files are allowed!'), false);
+    // Only image files are allowed!
+    cb(new Error('Nur Bilddateien sind erlaubt!'), false);
   }
 };
 
