@@ -152,7 +152,7 @@ export const searchUsers = async (searchTerm, page = 1, pageSize = 10) => {
     }
 };
 
-export const createUser = async ({ email, password, firstName, lastName, dob, gender, country, shares }) => {
+export const createUser = async ({ email, password, firstName, lastName, dob, gender, country, shares, klarnaPurchasePrice }) => {
     try {
 
         //Check if user already exists
@@ -163,7 +163,7 @@ export const createUser = async ({ email, password, firstName, lastName, dob, ge
 
         const encryptedPassword = encryptPassword(password);
         const hash = await hashPassword(password);
-        await User.create({ email, password: hash, encryptedPassword: encryptedPassword, firstName, lastName, dob, gender, country, shares });
+        await User.create({ email, password: hash, encryptedPassword: encryptedPassword, firstName, lastName, dob, gender, country, shares, klarnaPurchasePrice });
     } catch (err) {
         throw err;
     }
@@ -172,7 +172,7 @@ export const createUser = async ({ email, password, firstName, lastName, dob, ge
 export const updateUser = async (userId, updateData) => {
 
     try {
-        const allowedFields = ['firstName', 'lastName', 'dob', 'gender', 'country', 'shares'];
+        const allowedFields = ['firstName', 'lastName', 'dob', 'gender', 'country', 'shares', 'klarnaPurchasePrice'];
         const updates = {};
       
         for (const key of allowedFields) {

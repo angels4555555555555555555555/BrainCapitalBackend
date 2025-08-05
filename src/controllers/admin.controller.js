@@ -94,8 +94,8 @@ export const adminSearchUsers = async (req, res) => {
 
 export const adminCreateUser = async (req, res) => {
   try {
-    const { email, password, firstName, lastName, dob, gender, country, shares } = req.body;
-    await createUser({ email, password, firstName, lastName, dob, gender, country, shares });
+    const { email, password, firstName, lastName, dob, gender, country, shares, klarnaPurchasePrice } = req.body;
+    await createUser({ email, password, firstName, lastName, dob, gender, country, shares, klarnaPurchasePrice });
     return res.status(201).json({ message: "User created successfully" });
   } catch (err) {
     console.log(err);

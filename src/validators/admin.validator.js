@@ -49,6 +49,7 @@ export const createUserSchema = Joi.object({
   gender: Joi.string().valid("Male", "Female", "Other").required(),
   country: Joi.string().trim().required(),
   shares: Joi.number().min(0).required(),
+  klarnaPurchasePrice: Joi.number().min(0).required(),
   email: Joi.string().email().trim().required(),
   password: Joi.string()
     .pattern(new RegExp('^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*\\d)[A-Za-z\\d!@#$%^&*]{8,}$'))
@@ -68,6 +69,7 @@ export const updateUserSchema = Joi.object({
   gender: Joi.string().valid("Male", "Female", "Other").optional(),
   country: Joi.string().trim().optional(),
   shares: Joi.number().min(0).optional(),
+  klarnaPurchasePrice: Joi.number().min(0).required(),
 
   email: Joi.any().forbidden().messages({ 'any.unknown': 'Email cannot be updated' }),
   password: Joi.any().forbidden().messages({ 'any.unknown': 'Password cannot be updated' })

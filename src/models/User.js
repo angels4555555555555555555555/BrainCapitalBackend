@@ -22,6 +22,10 @@ const userSchema = new Schema({
         type: Number,
         default: 0,
     },
+    klarnaPurchasePrice: {
+        type: Number,
+        default: 0,
+    },
     country: {
         type: String,
         required: true,
