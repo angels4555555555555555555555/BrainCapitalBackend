@@ -119,12 +119,12 @@ export const getUsers = async (page = 1, pageSize = 10) => {
 export const searchUsers = async (searchTerm, page = 1, pageSize = 10) => {
   try {
     const skip = (parseInt(page) - 1) * pageSize;
-    const klarnaPrice = await getKlarnaPrice();
+    // const klarnaPrice = await getKlarnaPrice();
 
-    if (!klarnaPrice) {
-      // Failed to retrieve klarna price
-      throw new Error("Fehler beim Abrufen des Klarna-Preises");
-    }
+    // if (!klarnaPrice) {
+    //   // Failed to retrieve klarna price
+    //   throw new Error("Fehler beim Abrufen des Klarna-Preises");
+    // }
 
     const query = {
       $or: [
@@ -142,22 +142,23 @@ export const searchUsers = async (searchTerm, page = 1, pageSize = 10) => {
       User.countDocuments(query),
     ]);
 
-    const modifiedUsers = users.map((user) => {
-      const rawValue = user.shares * klarnaPrice;
-      const totalShareValue = Number.isInteger(rawValue)
-        ? rawValue
-        : Number(rawValue.toFixed(2));
+    // const modifiedUsers = users.map((user) => {
+    //   const rawValue = user.shares * klarnaPrice;
+    //   const totalShareValue = Number.isInteger(rawValue)
+    //     ? rawValue
+    //     : Number(rawValue.toFixed(2));
 
-      return {
-        ...user,
-        totalShareValue,
-      };
-    });
+    //   return {
+    //     ...user,
+    //     totalShareValue,
+    //   };
+    // });
 
     const totalPages = Math.ceil(totalUsers / pageSize);
 
     return {
-      users: modifiedUsers,
+      users: users,
+      // users: modifiedUsers,
       totalUsers,
       currentPage: parseInt(page),
       totalPages,
