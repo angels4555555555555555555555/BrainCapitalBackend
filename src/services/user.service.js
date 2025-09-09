@@ -5,69 +5,75 @@ import { getKlarnaPrice } from "../utils/klarnaPrice.js";
 import { generateAuthToken } from "../utils/jwt.js";
 
 export const login = async (email, password) => {
-    try {
-        const user = await User.findOne({ email });
-        if (!user) {
-            // Invalid user email or password
-            throw new Error("Ungültige Benutzer-E-Mail oder ungültiges Passwort");
-        }
-        const isPasswordValid = await verifyPassword(password, user.password);
-        if (!isPasswordValid) {
-            // Invalid user email or password
-            throw new Error("Ungültige Benutzer-E-Mail oder ungültiges Passwort");
-        }
-
-        const token = generateAuthToken(user._id, user.email, false);
-        return token;
-        
-    } catch (err) {
-        throw err;
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      // Invalid user email or password
+      throw new Error("Ungültige Benutzer-E-Mail oder ungültiges Passwort");
     }
+    const isPasswordValid = await verifyPassword(password, user.password);
+    if (!isPasswordValid) {
+      // Invalid user email or password
+      throw new Error("Ungültige Benutzer-E-Mail oder ungültiges Passwort");
+    }
+
+    const token = generateAuthToken(user._id, user.email, false);
+    return token;
+  } catch (err) {
+    throw err;
+  }
 };
 
 export const updateProfilePicture = async (user, filePath) => {
-    try
-    {
-        if(user.profilePicture && user.profilePicture.publicId && user.profilePicture.publicId !== "")
-        {
-            await deleteSingleImage(user.profilePicture.publicId);
-        }
-
-        const result = await uploadSingleImage(filePath);
-
-        await User.findByIdAndUpdate(user._id, { profilePicture: { url: result.url, publicId: result.publicId }});
-
+  try {
+    if (
+      user.profilePicture &&
+      user.profilePicture.publicId &&
+      user.profilePicture.publicId !== ""
+    ) {
+      await deleteSingleImage(user.profilePicture.publicId);
     }
-    catch(err)
-    {
-        throw err;
-    }
+
+    const result = await uploadSingleImage(filePath);
+
+    await User.findByIdAndUpdate(user._id, {
+      profilePicture: { url: result.url, publicId: result.publicId },
+    });
+  } catch (err) {
+    throw err;
+  }
 };
 
 export const getProfileData = async (userId) => {
-    try {
-        const user = await User.findById(userId).select("-password -encryptedPassword").lean();
-        if (!user) {
-            // User not found
-            throw new Error("Benutzer nicht gefunden");
-        }
-
-        const klarnaPrice = await getKlarnaPrice();
-
-        if (!klarnaPrice) {
-            // Failed to retrieve klarna price
-            throw new Error("Fehler beim Abrufen des Klarna-Preises");
-        }
-
-        const rawValue = user.shares * klarnaPrice;
-        const totalShareValue = Number.isInteger(rawValue) ? rawValue : Number(rawValue.toFixed(2));
-    
-        return {
-          ...user,
-          totalShareValue,
-          klarnaPrice
-        };
-    } catch (err) {
-        throw err;
+  try {
+    const user = await User.findById(userId)
+      .select("-password -encryptedPassword")
+      .lean();
+    if (!user) {
+      // User not found
+      throw new Error("Benutzer nicht gefunden");
     }
+
+    // const klarnaPrice = await getKlarnaPrice();
+
+    // if (!klarnaPrice) {
+    //   // Failed to retrieve klarna price
+    //   throw new Error("Fehler beim Abrufen des Klarna-Preises");
+    // }
+
+    // const rawValue = user.shares * klarnaPrice;
+    // const totalShareValue = Number.isInteger(rawValue)
+    //   ? rawValue
+    //   : Number(rawValue.toFixed(2));
+
+    // return {
+    //   ...user,
+    //   totalShareValue,
+    //   klarnaPrice
+    // };
+
+    return user;
+  } catch (err) {
+    throw err;
+  }
 };
