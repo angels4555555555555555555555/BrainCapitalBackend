@@ -1,9 +1,11 @@
 import fs from "fs";
 import { login, updateProfilePicture, getProfileData } from "../services/user.service.js";
-
+// Controller to update user password
+import { updateUserPassword } from "../services/user.service.js";
 export const userLogin = async (req, res) => {
   try {
     const { email, password } = req.body;
+    console.log(req.body)
     const token = await login(email, password);
 
     res.cookie("accessToken", token, {
@@ -65,7 +67,6 @@ export const updateUserProfilePicture = async (req, res) => {
 export const getUserProfileData = async (req, res) => {
   try {
     const user = await getProfileData(req.user._id);
-
     // Profile data fetched successfully
     return res.status(200).json({ message: "Profildaten erfolgreich abgerufen", user: user });
   } catch (err) {
@@ -84,3 +85,18 @@ export const userCheckAuthStatus = async (req, res) => {
     return res.status(400).json({ message: err.message });
   }
 }
+
+
+export const updatePassword = async (req, res) => {
+  try {
+    const userId = req.user?._id || req.user;
+    const { currentPassword, newPassword } = req.body;
+    if (!currentPassword || !newPassword) {
+      return res.status(400).json({ message: "Aktuelles und neues Passwort erforderlich" });
+    }
+    await updateUserPassword(userId, currentPassword, newPassword);
+    return res.status(200).json({ message: "Passwort erfolgreich aktualisiert" });
+  } catch (err) {
+    return res.status(400).json({ message: err.message });
+  }
+};
