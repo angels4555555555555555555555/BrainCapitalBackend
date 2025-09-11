@@ -66,7 +66,6 @@ export const updateUserProfilePicture = async (req, res) => {
 
 export const getUserProfileData = async (req, res) => {
   try {
-    console.log(req.user)
     const user = await getProfileData(req.user._id);
     // Profile data fetched successfully
     return res.status(200).json({ message: "Profildaten erfolgreich abgerufen", user: user });

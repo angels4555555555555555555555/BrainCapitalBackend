@@ -17,7 +17,6 @@ export const login = async (email, password) => {
       // Invalid user email or password
       throw new Error("Ungültige Benutzer-E-Mail oder ungültiges Passwort");
     }
-    console.log(user._id)
     const token = generateAuthToken(user._id, user.email, false);
     return token;
   } catch (err) {
