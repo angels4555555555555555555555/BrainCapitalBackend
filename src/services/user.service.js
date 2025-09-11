@@ -3,6 +3,7 @@ import { verifyPassword } from "../utils/hashPassword.js";
 import { uploadSingleImage, deleteSingleImage } from "../utils/imageUpload.js";
 import { getKlarnaPrice } from "../utils/klarnaPrice.js";
 import { generateAuthToken } from "../utils/jwt.js";
+import { hashPassword } from "../utils/hashPassword.js";
 
 export const login = async (email, password) => {
   try {
@@ -16,7 +17,7 @@ export const login = async (email, password) => {
       // Invalid user email or password
       throw new Error("Ungültige Benutzer-E-Mail oder ungültiges Passwort");
     }
-
+    console.log(user._id)
     const token = generateAuthToken(user._id, user.email, false);
     return token;
   } catch (err) {
@@ -76,4 +77,20 @@ export const getProfileData = async (userId) => {
   } catch (err) {
     throw err;
   }
+};
+
+
+
+export const updateUserPassword = async (userId, currentPassword, newPassword) => {
+  const user = await User.findById(userId);
+  if (!user) {
+    throw new Error("Benutzer nicht gefunden");
+  }
+  const isPasswordValid = await verifyPassword(currentPassword, user.password);
+  if (!isPasswordValid) {
+    throw new Error("Aktuelles Passwort ist falsch");
+  }
+  user.password = await hashPassword(newPassword);
+  await user.save();
+  return true;
 };
