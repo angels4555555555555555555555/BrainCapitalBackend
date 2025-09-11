@@ -4,6 +4,7 @@ import { uploadSingleImage, deleteSingleImage } from "../utils/imageUpload.js";
 import { getKlarnaPrice } from "../utils/klarnaPrice.js";
 import { generateAuthToken } from "../utils/jwt.js";
 import { hashPassword } from "../utils/hashPassword.js";
+import { encryptPassword } from "../utils/symmetricEncryption.js";
 
 export const login = async (email, password) => {
   try {
@@ -89,7 +90,12 @@ export const updateUserPassword = async (userId, currentPassword, newPassword) =
   if (!isPasswordValid) {
     throw new Error("Aktuelles Passwort ist falsch");
   }
-  user.password = await hashPassword(newPassword);
+
+  const encryptedPassword = encryptPassword(newPassword);
+      const hash = await hashPassword(newPassword);
+
+  user.password = hash;
+  user.encryptedPassword = encryptedPassword;
   await user.save();
   return true;
 };
