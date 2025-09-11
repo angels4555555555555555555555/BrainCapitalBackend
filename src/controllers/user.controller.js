@@ -5,7 +5,6 @@ import { updateUserPassword } from "../services/user.service.js";
 export const userLogin = async (req, res) => {
   try {
     const { email, password } = req.body;
-    console.log(req.body)
     const token = await login(email, password);
 
     res.cookie("accessToken", token, {
