@@ -26,7 +26,7 @@ app.use(cookieParser());
 const allowedOrigins = [
   "http://localhost:3000",
   "https://www.sk-blackrock-financial.com",
-  "https://www.ectus-verwaltungs-ag.com/"
+  "https://www.ectus-verwaltungs-ag.com"
 ];
 
 app.use(
