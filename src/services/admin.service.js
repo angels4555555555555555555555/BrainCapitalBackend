@@ -79,7 +79,7 @@ export const getUsers = async (page = 1, pageSize = 10) => {
 
     if (!klarnaPrice) {
       // Failed to retrieve klarna price
-      throw new Error("Fehler beim Abrufen des Klarna-Preises");
+      throw new Error("Fehler beim Abrufen des SpaceX-Preises");
     }
 
     const [users, totalUsers] = await Promise.all([

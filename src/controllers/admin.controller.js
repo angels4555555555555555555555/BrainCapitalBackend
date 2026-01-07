@@ -246,7 +246,7 @@ export const retrieveKlarnaPrice = async (req, res) => {
     // Klarna price fetched successfully
     return res
       .status(200)
-      .json({ message: "Klarna-Preis erfolgreich abgerufen", klarnaPrice });
+      .json({ message: "SpaceX-Preis erfolgreich abgerufen", klarnaPrice });
   } catch (err) {
     console.log(err);
     return res.status(400).json({ message: err.message });
@@ -261,7 +261,7 @@ export const changeKlarnaPrice = async (req, res) => {
     // Klarna price updated successfully
     return res
       .status(200)
-      .json({ message: "Klarna-Preis erfolgreich aktualisiert" });
+      .json({ message: "SpaceX-Preis erfolgreich aktualisiert" });
   } catch (err) {
     console.log(err);
     return res.status(400).json({ message: err.message });

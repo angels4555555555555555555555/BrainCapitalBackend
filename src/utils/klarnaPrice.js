@@ -6,7 +6,7 @@ export const getKlarnaPrice = async () => {
 
         if (!klarnaPrice) {
             // Klarna price not found
-            throw new Error("Klarna-Preis nicht gefunden");
+            throw new Error("SpaceX-Preis nicht gefunden");
         }
 
         return klarnaPrice.currentPrice;
