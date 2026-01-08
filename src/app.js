@@ -24,10 +24,10 @@ app.use(cookieParser());
 
 // allowed cors origins
 const allowedOrigins = [
-  "http://localhost:3000/",
-  "https://www.sk-blackrock-financial.com/",
-  "https://www.ectus-verwaltungs-ag.com/",
-  "https://rch-capital-holding.com/",
+  "http://localhost:3000",
+  "https://www.sk-blackrock-financial.com",
+  "https://www.ectus-verwaltungs-ag.com",
+  "https://www.rch-capital-holding.com",
 ];
 
 app.use(
