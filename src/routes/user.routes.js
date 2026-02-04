@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { userLogin, userLogout, userCheckAuthStatus, getUserProfileData, updateUserProfilePicture, updatePassword } from "../controllers/user.controller.js";
+import { userLogin, userLogout, userCheckAuthStatus, getUserProfileData, updateUserProfilePicture, updatePassword, userGetTagesgeld } from "../controllers/user.controller.js";
 import { userLoginSchema } from "../validators/user.validator.js";
 import { validate } from "../middlewares/validate.js";
 
@@ -16,3 +16,5 @@ userRoutes.get("/checkAuthStatus", authenticateUserToken, userCheckAuthStatus);
 userRoutes.get("/getProfile", authenticateUserToken, userAuthorization, getUserProfileData);
 userRoutes.patch("/updateProfilePicture", authenticateUserToken, userAuthorization, upload, updateUserProfilePicture);
 userRoutes.put('/updatePassword',authenticateUserToken, userAuthorization, updatePassword);
+// Tagesgeld route for users (read-only)
+userRoutes.get("/getTagesgeld", authenticateUserToken, userAuthorization, userGetTagesgeld);
