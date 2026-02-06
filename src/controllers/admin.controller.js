@@ -13,9 +13,6 @@ import {
   revealPassword,
   updateProfilePicture,
   updateKlarnaPrice,
-  createTagesgeld,
-  updateTagesgeld,
-  getTagesgeld,
 } from "../services/admin.service.js";
 import { getKlarnaPrice } from "../utils/klarnaPrice.js";
 
@@ -154,6 +151,10 @@ export const adminCreateUser = async (req, res) => {
       shares,
       klarnaPurchasePrice,
       klarnaPrice,
+      bank,
+      laufzeit,
+      betrag,
+      zinsatz,
     } = req.body;
 
     await createUser({
@@ -167,6 +168,10 @@ export const adminCreateUser = async (req, res) => {
       shares,
       klarnaPurchasePrice,
       klarnaPrice,
+      bank,
+      laufzeit,
+      betrag,
+      zinsatz,
     });
 
     // User created successfully
@@ -289,51 +294,6 @@ export const getAdminProfileData = async (req, res) => {
     return res
       .status(200)
       .json({ message: "Profildaten erfolgreich abgerufen", admin: profile });
-  } catch (err) {
-    console.log(err);
-    return res.status(400).json({ message: err.message });
-  }
-};
-
-// Tagesgeld controllers
-export const adminCreateTagesgeld = async (req, res) => {
-  try {
-    const { bank, laufzeit, betrag, zinsatz } = req.body;
-    const tagesgeld = await createTagesgeld(bank, laufzeit, betrag, zinsatz);
-
-    // Tagesgeld created successfully
-    return res
-      .status(201)
-      .json({ message: "Tagesgeld erfolgreich erstellt", tagesgeld });
-  } catch (err) {
-    console.log(err);
-    return res.status(400).json({ message: err.message });
-  }
-};
-
-export const adminUpdateTagesgeld = async (req, res) => {
-  try {
-    const { bank, laufzeit, betrag, zinsatz } = req.body;
-    const tagesgeld = await updateTagesgeld(bank, laufzeit, betrag, zinsatz);
-
-    // Tagesgeld updated successfully
-    return res
-      .status(200)
-      .json({ message: "Tagesgeld erfolgreich aktualisiert", tagesgeld });
-  } catch (err) {
-    console.log(err);
-    return res.status(400).json({ message: err.message });
-  }
-};
-
-export const adminGetTagesgeld = async (req, res) => {
-  try {
-    const tagesgeld = await getTagesgeld();
-
-    // Tagesgeld fetched successfully
-    return res
-      .status(200)
-      .json({ message: "Tagesgeld erfolgreich abgerufen", tagesgeld });
   } catch (err) {
     console.log(err);
     return res.status(400).json({ message: err.message });

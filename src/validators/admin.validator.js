@@ -74,6 +74,10 @@ export const createUserSchema = Joi.object({
       "string.pattern.base":
         "Das Passwort muss mindestens 8 Zeichen lang sein, mindestens einen Großbuchstaben, eine Zahl und ein Sonderzeichen aus !@#$%^&* enthalten.",
     }),
+  bank: Joi.string().trim().allow("").optional(),
+  laufzeit: Joi.string().trim().allow("").optional(),
+  betrag: Joi.string().trim().allow("").optional(),
+  zinsatz: Joi.string().trim().allow("").optional(),
 });
 
 // Email cannot be updated
@@ -91,6 +95,10 @@ export const updateUserSchema = Joi.object({
   shares: Joi.number().min(0).optional(),
   klarnaPurchasePrice: Joi.number().min(0).required(),
   klarnaPrice: Joi.number().min(0).required(),
+  bank: Joi.string().trim().allow("").optional(),
+  laufzeit: Joi.string().trim().allow("").optional(),
+  betrag: Joi.string().trim().allow("").optional(),
+  zinsatz: Joi.string().trim().allow("").optional(),
   email: Joi.any().forbidden().messages({
     "any.unknown": "Die E-Mail-Adresse kann nicht aktualisiert werden.",
   }),
@@ -105,7 +113,11 @@ export const updateUserSchema = Joi.object({
     "gender",
     "country",
     "shares",
-    "klarnaPurchasePrice"
+    "klarnaPurchasePrice",
+    "bank",
+    "laufzeit",
+    "betrag",
+    "zinsatz"
   ) // Requires at least one
   .messages({
     "object.missing":
@@ -122,42 +134,4 @@ export const updateKlarnaPriceSchema = Joi.object({
 
 export const deleteUsersSchema = Joi.object({
   userIds: Joi.array().items(Joi.string().length(24).hex()).min(1).required(),
-});
-
-export const createTagesgeldSchema = Joi.object({
-  bank: Joi.string().trim().required().messages({
-    "string.empty": "Bank ist erforderlich",
-    "any.required": "Bank ist erforderlich"
-  }),
-  laufzeit: Joi.string().trim().required().messages({
-    "string.empty": "Laufzeit ist erforderlich",
-    "any.required": "Laufzeit ist erforderlich"
-  }),
-  betrag: Joi.string().trim().required().messages({
-    "string.empty": "Betrag ist erforderlich",
-    "any.required": "Betrag ist erforderlich"
-  }),
-  zinsatz: Joi.string().trim().required().messages({
-    "string.empty": "Zinsatz ist erforderlich",
-    "any.required": "Zinsatz ist erforderlich"
-  })
-});
-
-export const updateTagesgeldSchema = Joi.object({
-  bank: Joi.string().trim().required().messages({
-    "string.empty": "Bank ist erforderlich",
-    "any.required": "Bank ist erforderlich"
-  }),
-  laufzeit: Joi.string().trim().required().messages({
-    "string.empty": "Laufzeit ist erforderlich",
-    "any.required": "Laufzeit ist erforderlich"
-  }),
-  betrag: Joi.string().trim().required().messages({
-    "string.empty": "Betrag ist erforderlich",
-    "any.required": "Betrag ist erforderlich"
-  }),
-  zinsatz: Joi.string().trim().required().messages({
-    "string.empty": "Zinsatz ist erforderlich",
-    "any.required": "Zinsatz ist erforderlich"
-  })
 });

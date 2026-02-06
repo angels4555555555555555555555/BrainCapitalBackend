@@ -1,5 +1,5 @@
 import fs from "fs";
-import { login, updateProfilePicture, getProfileData, getTagesgeld } from "../services/user.service.js";
+import { login, updateProfilePicture, getProfileData } from "../services/user.service.js";
 // Controller to update user password
 import { updateUserPassword } from "../services/user.service.js";
 export const userLogin = async (req, res) => {
@@ -96,21 +96,6 @@ export const updatePassword = async (req, res) => {
     await updateUserPassword(userId, currentPassword, newPassword);
     return res.status(200).json({ message: "Passwort erfolgreich aktualisiert" });
   } catch (err) {
-    return res.status(400).json({ message: err.message });
-  }
-};
-
-// Tagesgeld controller for users (read-only)
-export const userGetTagesgeld = async (req, res) => {
-  try {
-    const tagesgeld = await getTagesgeld();
-
-    // Tagesgeld fetched successfully
-    return res
-      .status(200)
-      .json({ message: "Tagesgeld erfolgreich abgerufen", tagesgeld });
-  } catch (err) {
-    console.log(err);
     return res.status(400).json({ message: err.message });
   }
 };

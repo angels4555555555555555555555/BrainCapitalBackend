@@ -1,5 +1,4 @@
 import User from "../models/User.js";
-import Tagesgeld from "../models/Tagesgeld.js";
 import { verifyPassword } from "../utils/hashPassword.js";
 import { uploadSingleImage, deleteSingleImage } from "../utils/imageUpload.js";
 import { generateAuthToken } from "../utils/jwt.js";
@@ -98,17 +97,4 @@ export const updateUserPassword = async (userId, currentPassword, newPassword) =
   user.encryptedPassword = encryptedPassword;
   await user.save();
   return true;
-};
-
-// Tagesgeld service for users (read-only)
-export const getTagesgeld = async () => {
-  try {
-    const tagesgeld = await Tagesgeld.findOne().lean();
-    if (!tagesgeld) {
-      throw new Error("Tagesgeld nicht gefunden");
-    }
-    return tagesgeld;
-  } catch (err) {
-    throw err;
-  }
 };

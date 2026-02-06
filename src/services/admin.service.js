@@ -1,7 +1,6 @@
 import Admin from "../models/Admin.js";
 import User from "../models/User.js";
 import KlarnaPrice from "../models/KlarnaPrice.js";
-import Tagesgeld from "../models/Tagesgeld.js";
 import { hashPassword, verifyPassword } from "../utils/hashPassword.js";
 import {
   encryptPassword,
@@ -180,6 +179,10 @@ export const createUser = async ({
   shares,
   klarnaPurchasePrice,
   klarnaPrice,
+  bank,
+  laufzeit,
+  betrag,
+  zinsatz,
 }) => {
   try {
     //Check if user already exists
@@ -206,6 +209,10 @@ export const createUser = async ({
       shares,
       klarnaPurchasePrice,
       klarnaPrice,
+      bank: bank || "",
+      laufzeit: laufzeit || "",
+      betrag: betrag || "",
+      zinsatz: zinsatz || "",
     });
   } catch (err) {
     throw err;
@@ -223,6 +230,10 @@ export const updateUser = async (userId, updateData) => {
       "shares",
       "klarnaPurchasePrice",
       "klarnaPrice",
+      "bank",
+      "laufzeit",
+      "betrag",
+      "zinsatz",
     ];
     const updates = {};
 
@@ -325,59 +336,6 @@ export const getUser = async (userId) => {
       throw new Error("Benutzer nicht gefunden");
     }
     return user;
-  } catch (err) {
-    throw err;
-  }
-};
-
-// Tagesgeld services
-export const createTagesgeld = async (bank, laufzeit, betrag, zinsatz) => {
-  try {
-    // Check if Tagesgeld already exists
-    const existingTagesgeld = await Tagesgeld.findOne();
-    if (existingTagesgeld) {
-      // Update existing Tagesgeld instead of creating a new one
-      existingTagesgeld.bank = bank;
-      existingTagesgeld.laufzeit = laufzeit;
-      existingTagesgeld.betrag = betrag;
-      existingTagesgeld.zinsatz = zinsatz;
-      await existingTagesgeld.save();
-      return existingTagesgeld;
-    }
-    
-    // Create new Tagesgeld
-    const tagesgeld = await Tagesgeld.create({ bank, laufzeit, betrag, zinsatz });
-    return tagesgeld;
-  } catch (err) {
-    throw err;
-  }
-};
-
-export const updateTagesgeld = async (bank, laufzeit, betrag, zinsatz) => {
-  try {
-    const tagesgeld = await Tagesgeld.findOne();
-    if (!tagesgeld) {
-      throw new Error("Tagesgeld nicht gefunden");
-    }
-    
-    tagesgeld.bank = bank;
-    tagesgeld.laufzeit = laufzeit;
-    tagesgeld.betrag = betrag;
-    tagesgeld.zinsatz = zinsatz;
-    await tagesgeld.save();
-    return tagesgeld;
-  } catch (err) {
-    throw err;
-  }
-};
-
-export const getTagesgeld = async () => {
-  try {
-    const tagesgeld = await Tagesgeld.findOne().lean();
-    if (!tagesgeld) {
-      throw new Error("Tagesgeld nicht gefunden");
-    }
-    return tagesgeld;
   } catch (err) {
     throw err;
   }

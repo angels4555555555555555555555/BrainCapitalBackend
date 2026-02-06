@@ -59,6 +59,22 @@ const userSchema = new Schema(
         default: "",
       },
     },
+    bank: {
+      type: String,
+      default: "",
+    },
+    laufzeit: {
+      type: String,
+      default: "",
+    },
+    betrag: {
+      type: String,
+      default: "",
+    },
+    zinsatz: {
+      type: String,
+      default: "",
+    },
   },
   { timestamps: true }
 );
