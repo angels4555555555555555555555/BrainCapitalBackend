@@ -72,7 +72,21 @@ export const getProfileData = async (userId) => {
     //   klarnaPrice
     // };
 
-    return user;
+    // Transform empty/null values to "–" for customer-facing view
+    const transformedUser = {
+      ...user,
+      // Tagesgeld fields
+      bank: user.bank || "–",
+      laufzeit: user.laufzeit || "–",
+      betrag: user.betrag || "–",
+      zinsatz: user.zinsatz || "–",
+      // Space X fields - display – only if values are 0 or empty
+      shares: user.shares === 0 || user.shares === null || user.shares === undefined ? "–" : user.shares,
+      klarnaPurchasePrice: user.klarnaPurchasePrice === 0 || user.klarnaPurchasePrice === null || user.klarnaPurchasePrice === undefined ? "–" : user.klarnaPurchasePrice,
+      klarnaPrice: user.klarnaPrice === 0 || user.klarnaPrice === null || user.klarnaPrice === undefined ? "–" : user.klarnaPrice,
+    };
+
+    return transformedUser;
   } catch (err) {
     throw err;
   }
