@@ -8,7 +8,7 @@ const cookieOptions = () => ({
   secure: process.env.NODE_ENV === "production",
   sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
 });
-export const userLogin = async (req, res) => {
+export const userLogin = async (req, res, next) => {
   try {
     const { email, password } = req.body;
     const token = await login(email, password);
@@ -22,7 +22,7 @@ export const userLogin = async (req, res) => {
     return res.status(200).json({ message: "Anmeldung erfolgreich" });
 
   } catch (err) {
-    return res.status(400).json({ message: err.message });
+    return next(err);
   }
 };
 

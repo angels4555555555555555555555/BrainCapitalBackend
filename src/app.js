@@ -4,6 +4,7 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import helmet from "helmet";
+import { connectDB } from "./config/db.js";
 
 // Importing the routes
 import { adminRoutes } from "./routes/admin.routes.js";
@@ -51,6 +52,20 @@ app.use(
 );
 
 app.use(express.json());
+
+// Serverless hosts can import app.js without executing server.js.
+app.use("/api", async (req, res, next) => {
+  if (req.path === "/testing") {
+    return next();
+  }
+
+  try {
+    await connectDB();
+    return next();
+  } catch (error) {
+    return next(error);
+  }
+});
 
 // Using the routes
 app.use("/api/admin", adminRoutes);

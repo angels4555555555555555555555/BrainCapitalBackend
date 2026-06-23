@@ -10,12 +10,16 @@ export const login = async (email, password) => {
     const user = await User.findOne({ email });
     if (!user) {
       // Invalid user email or password
-      throw new Error("Ungültige Benutzer-E-Mail oder ungültiges Passwort");
+      const error = new Error("Ungültige Benutzer-E-Mail oder ungültiges Passwort");
+      error.status = 401;
+      throw error;
     }
     const isPasswordValid = await verifyPassword(password, user.password);
     if (!isPasswordValid) {
       // Invalid user email or password
-      throw new Error("Ungültige Benutzer-E-Mail oder ungültiges Passwort");
+      const error = new Error("Ungültige Benutzer-E-Mail oder ungültiges Passwort");
+      error.status = 401;
+      throw error;
     }
     const token = generateAuthToken(user._id, user.email, false);
     return token;
