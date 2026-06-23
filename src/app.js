@@ -28,6 +28,7 @@ const defaultAllowedOrigins = [
   "https://www.sk-blackrock-financial.com",
   "https://www.ectus-verwaltungs-ag.com",
   "https://www.brain-capital-asset.com",
+  "https://brain-capital-frontend.vercel.app"
 ];
 const configuredOrigins = (process.env.CORS_ORIGINS || "")
   .split(",")
