@@ -54,36 +54,34 @@ export const getProfileData = async (userId) => {
       throw new Error("Benutzer nicht gefunden");
     }
 
-    // const klarnaPrice = await getKlarnaPrice();
+    // Transform empty/null/zero values to "–" for customer-facing view
+    const blankIfEmpty = (val) =>
+      val === 0 || val === null || val === undefined || val === ""
+        ? "–"
+        : val;
 
-    // if (!klarnaPrice) {
-    //   // Failed to retrieve klarna price
-    //   throw new Error("Fehler beim Abrufen des Klarna-Preises");
-    // }
-
-    // const rawValue = user.shares * klarnaPrice;
-    // const totalShareValue = Number.isInteger(rawValue)
-    //   ? rawValue
-    //   : Number(rawValue.toFixed(2));
-
-    // return {
-    //   ...user,
-    //   totalShareValue,
-    //   klarnaPrice
-    // };
-
-    // Transform empty/null values to "–" for customer-facing view
     const transformedUser = {
       ...user,
-      // Tagesgeld fields
-      bank: user.bank || "–",
-      laufzeit: user.laufzeit || "–",
-      betrag: user.betrag || "–",
-      zinsatz: user.zinsatz || "–",
-      // Space X fields - display – only if values are 0 or empty
-      shares: user.shares === 0 || user.shares === null || user.shares === undefined ? "–" : user.shares,
-      klarnaPurchasePrice: user.klarnaPurchasePrice === 0 || user.klarnaPurchasePrice === null || user.klarnaPurchasePrice === undefined ? "–" : user.klarnaPurchasePrice,
-      klarnaPrice: user.klarnaPrice === 0 || user.klarnaPrice === null || user.klarnaPrice === undefined ? "–" : user.klarnaPrice,
+      festgeld: {
+        bank: blankIfEmpty(user.festgeld?.bank),
+        betrag: blankIfEmpty(user.festgeld?.betrag),
+        zinsen: blankIfEmpty(user.festgeld?.zinsen),
+        laufzeit: blankIfEmpty(user.festgeld?.laufzeit),
+      },
+      tagesgeld: {
+        bank: blankIfEmpty(user.tagesgeld?.bank),
+        betrag: blankIfEmpty(user.tagesgeld?.betrag),
+        zinsen: blankIfEmpty(user.tagesgeld?.zinsen),
+        garantierteZinslaufzeit: blankIfEmpty(user.tagesgeld?.garantierteZinslaufzeit),
+      },
+      openAI: {
+        anzahl: blankIfEmpty(user.openAI?.anzahl),
+        gekaufterWert: blankIfEmpty(user.openAI?.gekaufterWert),
+        aktuellerWert: blankIfEmpty(user.openAI?.aktuellerWert),
+        investition: blankIfEmpty(user.openAI?.investition),
+        aktuellerGewinn: blankIfEmpty(user.openAI?.aktuellerGewinn),
+        depotWert: blankIfEmpty(user.openAI?.depotWert),
+      },
     };
 
     return transformedUser;

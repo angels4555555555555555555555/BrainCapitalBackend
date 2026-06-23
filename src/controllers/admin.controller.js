@@ -12,9 +12,13 @@ import {
   deleteUser,
   revealPassword,
   updateProfilePicture,
-  updateKlarnaPrice,
 } from "../services/admin.service.js";
-import { getKlarnaPrice } from "../utils/klarnaPrice.js";
+
+const cookieOptions = () => ({
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production",
+  sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+});
 
 export const adminSignup = async (req, res) => {
   try {
@@ -35,9 +39,8 @@ export const adminLogin = async (req, res) => {
     const token = await login(email, password);
 
     res.cookie("access_token", token, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "none",
+      ...cookieOptions(),
+      maxAge: 3 * 24 * 60 * 60 * 1000,
     });
 
     // Login successful
@@ -50,12 +53,7 @@ export const adminLogin = async (req, res) => {
 
 export const adminLogout = async (req, res) => {
   try {
-    res.clearCookie("access_token", {
-      httpOnly: true,
-      secure: true,
-      sameSite: "None",
-      maxAge: 3 * 24 * 60 * 60 * 1000,
-    });
+    res.clearCookie("access_token", cookieOptions());
 
     // Logout successful
     return res.status(200).json({ message: "Abmeldung erfolgreich" });
@@ -148,13 +146,10 @@ export const adminCreateUser = async (req, res) => {
       dob,
       gender,
       country,
-      shares,
-      klarnaPurchasePrice,
-      klarnaPrice,
-      bank,
-      laufzeit,
-      betrag,
-      zinsatz,
+      products,
+      festgeld,
+      tagesgeld,
+      openAI,
     } = req.body;
 
     await createUser({
@@ -165,13 +160,10 @@ export const adminCreateUser = async (req, res) => {
       dob,
       gender,
       country,
-      shares,
-      klarnaPurchasePrice,
-      klarnaPrice,
-      bank,
-      laufzeit,
-      betrag,
-      zinsatz,
+      products,
+      festgeld,
+      tagesgeld,
+      openAI,
     });
 
     // User created successfully
@@ -189,7 +181,7 @@ export const adminUpdateUser = async (req, res) => {
 
     // User updated successfully"
     return res
-      .status(201)
+      .status(200)
       .json({ message: "Benutzer erfolgreich aktualisiert" });
   } catch (err) {
     console.log(err);
@@ -203,7 +195,7 @@ export const adminDeleteUser = async (req, res) => {
     await deleteUser(userIds);
 
     // User deleted successfully
-    return res.status(201).json({ message: "Benutzer erfolgreich gelöscht" });
+    return res.status(200).json({ message: "Benutzer erfolgreich gelöscht" });
   } catch (err) {
     console.log(err);
     return res.status(400).json({ message: err.message });
@@ -244,35 +236,6 @@ export const updateAdminProfilePicture = async (req, res) => {
     if (req.file && req.file.path && fs.existsSync(req.file.path)) {
       fs.unlinkSync(req.file.path);
     }
-  }
-};
-
-export const retrieveKlarnaPrice = async (req, res) => {
-  try {
-    const klarnaPrice = await getKlarnaPrice();
-
-    // Klarna price fetched successfully
-    return res
-      .status(200)
-      .json({ message: "SpaceX-Preis erfolgreich abgerufen", klarnaPrice });
-  } catch (err) {
-    console.log(err);
-    return res.status(400).json({ message: err.message });
-  }
-};
-
-export const changeKlarnaPrice = async (req, res) => {
-  try {
-    const { newKlarnaPrice } = req.body;
-    await updateKlarnaPrice(newKlarnaPrice);
-
-    // Klarna price updated successfully
-    return res
-      .status(200)
-      .json({ message: "SpaceX-Preis erfolgreich aktualisiert" });
-  } catch (err) {
-    console.log(err);
-    return res.status(400).json({ message: err.message });
   }
 };
 

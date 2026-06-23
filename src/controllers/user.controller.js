@@ -2,15 +2,20 @@ import fs from "fs";
 import { login, updateProfilePicture, getProfileData } from "../services/user.service.js";
 // Controller to update user password
 import { updateUserPassword } from "../services/user.service.js";
+
+const cookieOptions = () => ({
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production",
+  sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+});
 export const userLogin = async (req, res) => {
   try {
     const { email, password } = req.body;
     const token = await login(email, password);
 
     res.cookie("accessToken", token, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "none",
+      ...cookieOptions(),
+      maxAge: 3 * 24 * 60 * 60 * 1000,
     });
 
     // Login successful
@@ -23,12 +28,7 @@ export const userLogin = async (req, res) => {
 
 export const userLogout = async (req, res) => {
   try {
-    res.clearCookie("accessToken", {
-      httpOnly: true,
-      secure: true,
-      sameSite: "None",
-      maxAge: 3 * 24 * 60 * 60 * 1000,
-    });
+    res.clearCookie("accessToken", cookieOptions());
 
     // Logout successful
     return res.status(200).json({ message: "Abmeldung erfolgreich" });

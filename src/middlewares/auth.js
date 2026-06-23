@@ -15,6 +15,10 @@ export const authenticateUserToken = async (req, res, next) => {
             return res.status(403).json({ message: 'Ungültiger Token' });
         }
 
+        if (decryptedToken.isAdmin) {
+            return res.status(403).json({ message: 'Ungültiger Benutzertoken' });
+        }
+
         req.authentication = decryptedToken;
 
         next();
@@ -39,6 +43,10 @@ export const authenticateAdminToken = async (req, res, next) => {
             console.log(decryptedToken);
             // Invalid token
             return res.status(403).json({ message: 'Ungültiger Token' });
+        }
+
+        if (!decryptedToken.isAdmin) {
+            return res.status(403).json({ message: 'Ungültiger Administratortoken' });
         }
 
         req.authentication = decryptedToken;

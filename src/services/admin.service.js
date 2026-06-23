@@ -1,6 +1,5 @@
 import Admin from "../models/Admin.js";
 import User from "../models/User.js";
-import KlarnaPrice from "../models/KlarnaPrice.js";
 import { hashPassword, verifyPassword } from "../utils/hashPassword.js";
 import {
   encryptPassword,
@@ -8,7 +7,6 @@ import {
 } from "../utils/symmetricEncryption.js";
 import { generateAuthToken } from "../utils/jwt.js";
 import { uploadSingleImage, deleteSingleImage } from "../utils/imageUpload.js";
-import { getKlarnaPrice } from "../utils/klarnaPrice.js";
 
 export const signup = async (email, password) => {
   try {
@@ -75,38 +73,20 @@ export const changePassword = async (id, oldPassword, newPassword) => {
 export const getUsers = async (page = 1, pageSize = 10) => {
   try {
     const skip = (parseInt(page) - 1) * pageSize;
-    const klarnaPrice = await getKlarnaPrice();
-
-    if (!klarnaPrice) {
-      // Failed to retrieve klarna price
-      throw new Error("Fehler beim Abrufen des SpaceX-Preises");
-    }
 
     const [users, totalUsers] = await Promise.all([
       User.find()
         .skip(skip)
         .limit(pageSize)
-        .select("-password -profilePicture")
+        .select("-password -encryptedPassword -profilePicture")
         .lean(),
       User.countDocuments(),
     ]);
 
     const totalPages = Math.ceil(totalUsers / pageSize);
 
-    const modifiedUsers = users.map((user) => {
-      const rawValue = user.shares * klarnaPrice;
-      const totalShareValue = Number.isInteger(rawValue)
-        ? rawValue
-        : Number(rawValue.toFixed(2));
-
-      return {
-        ...user,
-        totalShareValue,
-      };
-    });
-
     return {
-      users: modifiedUsers,
+      users,
       totalUsers,
       currentPage: parseInt(page),
       totalPages,
@@ -119,17 +99,13 @@ export const getUsers = async (page = 1, pageSize = 10) => {
 export const searchUsers = async (searchTerm, page = 1, pageSize = 10) => {
   try {
     const skip = (parseInt(page) - 1) * pageSize;
-    // const klarnaPrice = await getKlarnaPrice();
-
-    // if (!klarnaPrice) {
-    //   // Failed to retrieve klarna price
-    //   throw new Error("Fehler beim Abrufen des Klarna-Preises");
-    // }
+    const escapedSearchTerm = searchTerm.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
     const query = {
       $or: [
-        { firstName: { $regex: searchTerm, $options: "i" } },
-        { lastName: { $regex: searchTerm, $options: "i" } },
+        { firstName: { $regex: escapedSearchTerm, $options: "i" } },
+        { lastName: { $regex: escapedSearchTerm, $options: "i" } },
+        { email: { $regex: escapedSearchTerm, $options: "i" } },
       ],
     };
 
@@ -137,28 +113,15 @@ export const searchUsers = async (searchTerm, page = 1, pageSize = 10) => {
       User.find(query)
         .skip(skip)
         .limit(pageSize)
-        .select("-password -profilePicture")
+        .select("-password -encryptedPassword -profilePicture")
         .lean(),
       User.countDocuments(query),
     ]);
 
-    // const modifiedUsers = users.map((user) => {
-    //   const rawValue = user.shares * klarnaPrice;
-    //   const totalShareValue = Number.isInteger(rawValue)
-    //     ? rawValue
-    //     : Number(rawValue.toFixed(2));
-
-    //   return {
-    //     ...user,
-    //     totalShareValue,
-    //   };
-    // });
-
     const totalPages = Math.ceil(totalUsers / pageSize);
 
     return {
-      users: users,
-      // users: modifiedUsers,
+      users,
       totalUsers,
       currentPage: parseInt(page),
       totalPages,
@@ -176,13 +139,10 @@ export const createUser = async ({
   dob,
   gender,
   country,
-  shares,
-  klarnaPurchasePrice,
-  klarnaPrice,
-  bank,
-  laufzeit,
-  betrag,
-  zinsatz,
+  products,
+  festgeld = {},
+  tagesgeld = {},
+  openAI = {},
 }) => {
   try {
     //Check if user already exists
@@ -206,54 +166,68 @@ export const createUser = async ({
       dob,
       gender,
       country,
-      shares: shares !== undefined && shares !== "" ? shares : 0,
-      klarnaPurchasePrice: klarnaPurchasePrice !== undefined && klarnaPurchasePrice !== "" ? klarnaPurchasePrice : 0,
-      klarnaPrice: klarnaPrice !== undefined && klarnaPrice !== "" ? klarnaPrice : 0,
-      bank: bank || "",
-      laufzeit: laufzeit || "",
-      betrag: betrag || "",
-      zinsatz: zinsatz || "",
+      products,
+      festgeld: {
+        bank: festgeld.bank || "",
+        betrag: festgeld.betrag !== undefined && festgeld.betrag !== "" ? festgeld.betrag : 0,
+        zinsen: festgeld.zinsen !== undefined && festgeld.zinsen !== "" ? festgeld.zinsen : 0,
+        laufzeit: festgeld.laufzeit || "",
+      },
+      tagesgeld: {
+        bank: tagesgeld.bank || "",
+        betrag: tagesgeld.betrag !== undefined && tagesgeld.betrag !== "" ? tagesgeld.betrag : 0,
+        zinsen: tagesgeld.zinsen !== undefined && tagesgeld.zinsen !== "" ? tagesgeld.zinsen : 0,
+        garantierteZinslaufzeit: tagesgeld.garantierteZinslaufzeit || "",
+      },
+      openAI: {
+        anzahl: openAI.anzahl !== undefined && openAI.anzahl !== "" ? openAI.anzahl : 0,
+        gekaufterWert: openAI.gekaufterWert !== undefined && openAI.gekaufterWert !== "" ? openAI.gekaufterWert : 0,
+        aktuellerWert: openAI.aktuellerWert !== undefined && openAI.aktuellerWert !== "" ? openAI.aktuellerWert : 0,
+        investition: openAI.investition !== undefined && openAI.investition !== "" ? openAI.investition : 0,
+        aktuellerGewinn: openAI.aktuellerGewinn !== undefined && openAI.aktuellerGewinn !== "" ? openAI.aktuellerGewinn : 0,
+        depotWert: openAI.depotWert !== undefined && openAI.depotWert !== "" ? openAI.depotWert : 0,
+      },
     });
   } catch (err) {
     throw err;
   }
 };
 
+const PRODUCT_FIELDS = {
+  festgeld: ["bank", "betrag", "zinsen", "laufzeit"],
+  tagesgeld: ["bank", "betrag", "zinsen", "garantierteZinslaufzeit"],
+  openAI: ["anzahl", "gekaufterWert", "aktuellerWert", "investition", "aktuellerGewinn", "depotWert"],
+};
+
 export const updateUser = async (userId, updateData) => {
   try {
-    const allowedFields = [
-      "firstName",
-      "lastName",
-      "dob",
-      "gender",
-      "country",
-      "shares",
-      "klarnaPurchasePrice",
-      "klarnaPrice",
-      "bank",
-      "laufzeit",
-      "betrag",
-      "zinsatz",
-    ];
-    const updates = {};
-
-    for (const key of allowedFields) {
-      if (key in updateData) {
-        updates[key] = updateData[key];
-      }
-    }
-
-    const updatedUser = await User.findByIdAndUpdate(userId, updates, {
-      new: true,
-      runValidators: true,
-    });
-
-    if (!updatedUser) {
+    const user = await User.findById(userId);
+    if (!user) {
       // User not found
       throw new Error("Benutzer nicht gefunden");
     }
 
-    return updatedUser;
+    const topLevelFields = ["firstName", "lastName", "dob", "gender", "country", "products"];
+    for (const key of topLevelFields) {
+      if (key in updateData) {
+        user[key] = updateData[key];
+      }
+    }
+
+    // Merge nested product updates field-by-field so partial updates don't wipe sibling fields
+    for (const [group, fields] of Object.entries(PRODUCT_FIELDS)) {
+      if (updateData[group]) {
+        if (!user[group]) user[group] = {};
+        for (const field of fields) {
+          if (field in updateData[group]) {
+            user[group][field] = updateData[group][field];
+          }
+        }
+      }
+    }
+
+    await user.save();
+    return user;
   } catch (err) {
     throw err;
   }
@@ -296,18 +270,6 @@ export const updateProfilePicture = async (admin, filePath) => {
     await Admin.findByIdAndUpdate(admin._id, {
       profilePicture: { url: result.url, publicId: result.publicId },
     });
-  } catch (err) {
-    throw err;
-  }
-};
-
-export const updateKlarnaPrice = async (newKlarnaPrice) => {
-  try {
-    await KlarnaPrice.updateOne(
-      {},
-      { $set: { currentPrice: newKlarnaPrice } },
-      { upsert: true }
-    );
   } catch (err) {
     throw err;
   }

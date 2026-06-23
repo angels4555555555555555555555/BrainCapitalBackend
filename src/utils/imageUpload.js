@@ -1,8 +1,9 @@
-import cloudinary from '../config/cloudinary.js';
+import cloudinary, { assertCloudinaryConfigured } from '../config/cloudinary.js';
 import fs from 'fs';
 
 export const uploadSingleImage = async (filePath, folder = 'uploads') => {
     try {
+        assertCloudinaryConfigured();
         const result = await cloudinary.uploader.upload(filePath, {
             folder,
             resource_type: 'image',
@@ -23,6 +24,7 @@ export const uploadSingleImage = async (filePath, folder = 'uploads') => {
 
 export const deleteSingleImage = async (publicId) => {
     try {
+        assertCloudinaryConfigured();
         const result = await cloudinary.uploader.destroy(publicId);
         return result;
 

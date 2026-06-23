@@ -2,7 +2,6 @@
 import dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
-import path from "path";
 import cookieParser from "cookie-parser";
 import helmet from "helmet";
 
@@ -23,18 +22,24 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 // allowed cors origins
-const allowedOrigins = [
+const defaultAllowedOrigins = [
   "http://localhost:3000",
+  "http://127.0.0.1:3000",
   "https://www.sk-blackrock-financial.com",
   "https://www.ectus-verwaltungs-ag.com",
-  "https://www.rch-capital-holding.com",
+  "https://www.brain-capital-asset.com",
 ];
+const configuredOrigins = (process.env.CORS_ORIGINS || "")
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+const allowedOrigins = new Set([...defaultAllowedOrigins, ...configuredOrigins]);
 
 app.use(
   cors({
     origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, origin);
+      if (!origin || allowedOrigins.has(origin)) {
+        callback(null, true);
       } else {
         // Not allowed by CORS
         callback(new Error("Von CORS nicht erlaubt"));
@@ -50,5 +55,19 @@ app.use(express.json());
 app.use("/api/admin", adminRoutes);
 app.use("/api/user", userRoutes);
 app.get("/api/testing", (req, res) => res.send("Hello World, Testing APIs"));
+
+app.use((req, res) => {
+  res.status(404).json({ message: "API-Endpunkt nicht gefunden" });
+});
+
+app.use((err, req, res, next) => {
+  console.error(err);
+  if (err.message === "Von CORS nicht erlaubt") {
+    return res.status(403).json({ message: err.message });
+  }
+  return res.status(err.status || 500).json({
+    message: process.env.NODE_ENV === "production" ? "Interner Serverfehler" : err.message,
+  });
+});
 
 export default app;

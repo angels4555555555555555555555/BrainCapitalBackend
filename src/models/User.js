@@ -19,18 +19,6 @@ const userSchema = new Schema(
       enum: ["Männlich", "Weiblich", "Divers"],
       required: true,
     },
-    shares: {
-      type: Number,
-      default: 0,
-    },
-    klarnaPurchasePrice: {
-      type: Number,
-      default: 0,
-    },
-    klarnaPrice: {
-      type: Number,
-      default: 0,
-    },
     country: {
       type: String,
       required: true,
@@ -59,21 +47,71 @@ const userSchema = new Schema(
         default: "",
       },
     },
-    bank: {
+    products: [{
       type: String,
-      default: "",
+      enum: ["festgeld", "tagesgeld", "openAI"],
+    }],
+    festgeld: {
+      bank: {
+        type: String,
+        default: "",
+      },
+      betrag: {
+        type: Number,
+        default: 0,
+      },
+      zinsen: {
+        type: Number,
+        default: 0,
+      },
+      laufzeit: {
+        type: String,
+        default: "",
+      },
     },
-    laufzeit: {
-      type: String,
-      default: "",
+    tagesgeld: {
+      bank: {
+        type: String,
+        default: "",
+      },
+      betrag: {
+        type: Number,
+        default: 0,
+      },
+      zinsen: {
+        type: Number,
+        default: 0,
+      },
+      garantierteZinslaufzeit: {
+        type: String,
+        default: "",
+      },
     },
-    betrag: {
-      type: String,
-      default: "",
-    },
-    zinsatz: {
-      type: String,
-      default: "",
+    openAI: {
+      anzahl: {
+        type: Number,
+        default: 0,
+      },
+      gekaufterWert: {
+        type: Number,
+        default: 0,
+      },
+      aktuellerWert: {
+        type: Number,
+        default: 0,
+      },
+      investition: {
+        type: Number,
+        default: 0,
+      },
+      aktuellerGewinn: {
+        type: Number,
+        default: 0,
+      },
+      depotWert: {
+        type: Number,
+        default: 0,
+      },
     },
   },
   { timestamps: true }

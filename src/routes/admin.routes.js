@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { adminSignup, adminLogin, adminCheckAuthStatus, getAdminProfileData, adminChangePassword, adminGetUsers, adminGetUser, adminSearchUsers, adminCreateUser, adminLogout, adminDeleteUser, adminUpdateUser, updateAdminProfilePicture, revealUserPassword, retrieveKlarnaPrice, changeKlarnaPrice } from "../controllers/admin.controller.js";
-import { signupSchema, loginSchema, changePasswordSchema, getUsersScehma, searchUsersScehma, createUserSchema, updateUserSchema, deleteUsersSchema, userIdSchemaParams, updateKlarnaPriceSchema } from "../validators/admin.validator.js";
+import { adminSignup, adminLogin, adminCheckAuthStatus, getAdminProfileData, adminChangePassword, adminGetUsers, adminGetUser, adminSearchUsers, adminCreateUser, adminLogout, adminDeleteUser, adminUpdateUser, updateAdminProfilePicture, revealUserPassword } from "../controllers/admin.controller.js";
+import { signupSchema, loginSchema, changePasswordSchema, getUsersScehma, searchUsersScehma, createUserSchema, updateUserSchema, deleteUsersSchema, userIdSchemaParams } from "../validators/admin.validator.js";
 import { validate } from "../middlewares/validate.js";
 
 import { authenticateAdminToken } from "../middlewares/auth.js";
@@ -26,6 +26,3 @@ adminRoutes.get("/revealPassword/:id", authenticateAdminToken, adminAuthorizatio
 
 adminRoutes.get("/getUsers", authenticateAdminToken, adminAuthorization, validate(getUsersScehma, 'query'), adminGetUsers);
 adminRoutes.get("/searchUsers", authenticateAdminToken, adminAuthorization, validate(searchUsersScehma, 'query'), adminSearchUsers);
-
-adminRoutes.get("/retrieveKlarnaPrice", authenticateAdminToken, adminAuthorization, retrieveKlarnaPrice);
-adminRoutes.patch("/changeKlarnaPrice", authenticateAdminToken, adminAuthorization, validate(updateKlarnaPriceSchema, 'body'), changeKlarnaPrice);
