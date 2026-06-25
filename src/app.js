@@ -28,7 +28,7 @@ const defaultAllowedOrigins = [
   "http://127.0.0.1:3000",
   "https://www.sk-blackrock-financial.com",
   "https://www.ectus-verwaltungs-ag.com",
-  "https://www.brain-capital-asset.com",
+  "https://www.braincapitalasset.com",
   "https://brain-capital-frontend.vercel.app"
 ];
 const configuredOrigins = (process.env.CORS_ORIGINS || "")
